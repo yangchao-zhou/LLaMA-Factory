@@ -71,6 +71,8 @@ def calculate_lr(
     if stage == "pt":
         data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
     elif stage == "sft":
+        import pdb
+        pdb.set_trace()
         data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, label_pad_token_id=IGNORE_INDEX)
     else:
         raise NotImplementedError(f"Stage does not supported: {stage}.")

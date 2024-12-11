@@ -61,6 +61,12 @@ def resize_embedding_layer(model: "PreTrainedModel", tokenizer: "PreTrainedToken
 
         if not isinstance(model.get_output_embeddings(), torch.nn.Linear):
             raise ValueError("Current model does not support resizing embedding layers.")
+        #  todo
+        print("Model vocab size:", model.config.vocab_size)
+        print("Tokenizer type:", type(tokenizer))
+        print("Special tokens:", tokenizer.special_tokens_map)
+        from time import time
+        time.sleep(20)
 
         model.resize_token_embeddings(len(tokenizer), pad_to_multiple_of=64)
         with context_maybe_zero3:

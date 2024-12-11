@@ -1,0 +1,45 @@
+### model
+# model_name_or_path: /maindata/data/shared/public/yangchao.zhou/projects/NeMo-Aligner/HF_results/step_156_epoch_1
+# model_name_or_path: /maindata/data/shared/public/rufeng.dai/models/mistral_models/Mistral-Nemo-Instruct-2407-toconvernemo
+model_name_or_path: /maindata/data/shared/ai_story_workspace-dsw/nlp_models/mistralai/Mistral-Nemo-Instruct-2407-ModifiedChatTemplate
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+deepspeed: examples/deepspeed/ds_z2_offload_config.json
+
+### dataset
+dataset: linky_241210
+# dataset: glaive_toolcall_zh_demo
+# dataset: alpaca_en_demo
+template: mistral
+cutoff_len: 8192
+max_samples: 1000000000000
+overwrite_cache: true
+preprocessing_num_workers: 120
+
+### output
+output_dir: saves/mistral-12b-linky/full/sft
+logging_steps: 1
+save_steps: 20
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 1
+learning_rate: 3.0e-6
+num_train_epochs: 5.0
+lr_scheduler_type: cosine
+# warmup_ratio: 0.1
+warmup_steps: 10
+bf16: true
+ddp_timeout: 180000000
+max_grad_norm: 1.0
+flash_attn: fa2
+
+### eval
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 500

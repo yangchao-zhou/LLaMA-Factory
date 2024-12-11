@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 
 def prepare_4d_attention_mask(attention_mask_with_indices: "torch.Tensor", dtype: "torch.dtype") -> "torch.Tensor":
     r"""
-    Expands the attention mask with indices from (batch_size, seq_len) to (batch_size, 1, seq_len, seq_len),
+    Expands the attention mask with  from (batch_size, seq_len) to (batch_size, 1, seq_len, seq_len),
     while handles packed sequences and transforms the mask to lower triangular form to prevent future peeking.
 
     e.g.

@@ -1,14 +1,17 @@
 ### model
-model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
+# model_name_or_path: /maindata/data/shared/public/yangchao.zhou/projects/NeMo-Aligner/HF_results/step_156_epoch_1
+# model_name_or_path: /maindata/data/shared/public/rufeng.dai/models/mistral_models/Mistral-Nemo-Instruct-2407-toconvernemo
+model_name_or_path: /maindata/data/shared/ai_story_workspace-dsw/nlp_models/meta-llama/Meta-Llama-3-8B-Instruct
 
 ### method
 stage: sft
 do_train: true
 finetuning_type: full
-deepspeed: examples/deepspeed/ds_z3_config.json
+deepspeed: examples/deepspeed/ds_z3_config.json  # choices: [ds_z0_config.json, ds_z2_config.json, ds_z3_config.json]
 
 ### dataset
 dataset: identity,alpaca_en_demo
+# dataset: glaive_toolcall_zh_demo
 template: llama3
 cutoff_len: 2048
 max_samples: 1000

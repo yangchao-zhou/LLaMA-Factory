@@ -148,6 +148,7 @@ class Runner:
             use_galore=get("train.use_galore"),
             use_badam=get("train.use_badam"),
             output_dir=get_save_dir(model_name, finetuning_type, get("train.output_dir")),
+            fp32=(get("train.compute_type") == "fp32"),
             fp16=(get("train.compute_type") == "fp16"),
             bf16=(get("train.compute_type") == "bf16"),
             pure_bf16=(get("train.compute_type") == "pure_bf16"),

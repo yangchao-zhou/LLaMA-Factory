@@ -935,6 +935,7 @@ _register_template(
     name="mistral",
     format_user=StringFormatter(slots=["[INST] {{content}} [/INST]"]),
     format_prefix=EmptyFormatter(slots=[{"bos_token"}]),
+    format_system=StringFormatter(slots=["[INST] {{content}} [/INST]"]),
 )
 
 

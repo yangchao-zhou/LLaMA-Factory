@@ -1,0 +1,42 @@
+### model
+# model_name_or_path: /maindata/data/shared/public/yangchao.zhou/projects/NeMo-Aligner/HF_results/step_156_epoch_1
+# model_name_or_path: /maindata/data/shared/public/rufeng.dai/models/mistral_models/Mistral-Nemo-Instruct-2407-toconvernemo
+model_name_or_path: /maindata/data/shared/ai_story_workspace-dsw/nlp_models/meta-llama/Meta-Llama-3-8B-Instruct
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+deepspeed: examples/deepspeed/ds_z3_config.json
+
+### dataset
+dataset: glaive_toolcall_zh_demo
+# dataset: linky_241210
+# template: mistral
+template: llama3
+cutoff_len: 8192
+max_samples: 10000000
+overwrite_cache: true
+preprocessing_num_workers: 96
+
+### output
+output_dir: saves/mistral-12b/full/sft
+logging_steps: 10
+save_steps: 500
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 2
+learning_rate: 1.0e-5
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.5
+bf16: true
+ddp_timeout: 180000000
+
+### eval
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 500

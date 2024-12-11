@@ -1,4 +1,12 @@
 {
+  "linky_241210": {
+    "file_name": "linky/ES-cleaned_labeled_data-20241119_dedup-V2_1.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "system": "system"
+    }
+  },
   "identity": {
     "file_name": "identity.json"
   },
