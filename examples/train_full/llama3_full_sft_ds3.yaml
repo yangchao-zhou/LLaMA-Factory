@@ -1,6 +1,6 @@
 ### model
-model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
-
+# model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
+model_name_or_path: /maindata/data/shared/ai_story_workspace-dsw/nlp_models/meta-llama/Meta-Llama-3-8B-Instruct
 ### method
 stage: sft
 do_train: true
@@ -9,6 +9,7 @@ deepspeed: examples/deepspeed/ds_z3_config.json
 
 ### dataset
 dataset: identity,alpaca_en_demo
+# dataset: glaive_toolcall_zh_demo
 template: llama3
 cutoff_len: 2048
 max_samples: 1000
