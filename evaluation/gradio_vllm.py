@@ -19,16 +19,6 @@ client = OpenAI(
 )
 
 system = "你一个昆仑万维公司开发的模型"
-
-def format_think_content(content):
-    """将思维链内容转换为Markdown引用格式"""
-    if not content:
-        return content
-    # 分行处理，确保每行都有引用符号
-    lines = content.strip().split('\n')
-    formatted_lines = [f"> {line}" for line in lines]
-    return '\n'.join(formatted_lines)
-
 def predict(message, history):
     # 将聊天历史转换为 OpenAI 格式
     history_openai_format = [{"role": "system", "content": system}]
@@ -54,20 +44,7 @@ def predict(message, history):
     # 从响应流中读取并返回生成的文本
     partial_message = ""
     for chunk in stream:
-        content = chunk.choices[0].delta.content or ""
-        
-        # 检查并保留 <think></think> 标签
-        think_content = re.findall(r'<think>(.*?)</think>', content)
-        if think_content:
-            # 将思维链内容转换为Markdown引用格式
-            formatted_think = format_think_content(think_content[0])
-            partial_message += f"\n{formatted_think}\n"
-        
-        # 添加非思维链内容
-        other_content = content.replace(f"<think>{think_content[0]}</think>" if think_content else "", "")
-        if other_content:
-            partial_message += other_content
-        
+        partial_message += (chunk.choices[0].delta.content or "")
         yield partial_message
 
 # 创建一个聊天界面，并启动它，share=True 让 gradio 为我们提供一个 debug 用的域名
