@@ -20,36 +20,71 @@ client = OpenAI(
     api_key=openai_api_key,
     base_url=openai_api_base,
 )
-system = '''
-Hello! I'm an AI assistant that can help you with a variety of tasks.
-'''
-# system=""
-def predict(message, history):
-    # 将聊天历史转换为 OpenAI 格式
-    history_openai_format = [{"role": "system", "content": system}]
+
+# 默认 system 提示已移入前端配置，不再硬编码
+
+def predict(message, history, frontend_system, frontend_temperature):
+    # 使用前端传入的 system 提示
+    history_openai_format = [{"role": "system", "content": frontend_system}]
     for human, assistant in history:
         history_openai_format.append({"role": "user", "content": human })
-        history_openai_format.append({"role": "assistant", "content":assistant})
+        history_openai_format.append({"role": "assistant", "content": assistant})
     history_openai_format.append({"role": "user", "content": message})
-
-    # 创建一个聊天完成请求，并将其发送到 API 服务器
     stream = client.chat.completions.create(
-        model=model,   # 使用的模型名称
-        messages= history_openai_format,  # 聊天历史
-        temperature=0.8,                  # 控制生成文本的随机性
-        stream=True,                      # 是否以流的形式接收响应
-        # extra_body={
-        #     'repetition_penalty': 1, 
-        #     'stop_token_ids': [7]
-        # }
+        model=model,
+        messages=history_openai_format,
+        temperature=frontend_temperature,
+        stream=True,
     )
-
-    # 从响应流中读取并返回生成的文本
     partial_message = ""
     for chunk in stream:
         partial_message += (chunk.choices[0].delta.content or "")
-        # 使用 HTML 转义以展示 <think> 和 </think> 的内容
         yield partial_message.replace("<think>", "&lt;think&gt;").replace("</think>", "&lt;/think&gt;")
 
-# 创建一个聊天界面，并启动它，share=True 让 gradio 为我们提供一个 debug 用的域名
-gr.ChatInterface(predict).queue().launch(share=True)
+def user(message, chat_history, sys_prompt, temp):
+    chat_history = chat_history or []
+    # 保留之前的历史记录，只处理新消息
+    history_length = len(chat_history)
+    
+    for partial in predict(message, chat_history, sys_prompt, temp):
+        # 如果是第一次添加新消息
+        if len(chat_history) == history_length:
+            chat_history.append((message, partial))
+        else:
+            # 更新最后一条消息的回复部分
+            chat_history[-1] = (message, partial)
+        yield chat_history, chat_history
+
+def clear_history():
+    return [], []  # 清空 chatbot 和 state
+
+with gr.Blocks() as demo:
+    with gr.Row():
+        system_prompt = gr.Textbox(label="System Prompt", value="Hello! I'm an AI assistant that can help you with a variety of tasks.")
+        temperature_slider = gr.Slider(label="Temperature", minimum=0.0, maximum=1.0, value=0.8, step=0.01)
+    chatbot = gr.Chatbot()
+    with gr.Row():
+        msg = gr.Textbox(label="Your Message")
+        clear_btn = gr.Button("🗑️ Clear History")  # 添加清理按钮
+    state = gr.State([])
+
+    # 绑定清理按钮事件
+    clear_btn.click(
+        fn=clear_history,
+        outputs=[chatbot, state],
+        queue=False
+    )
+
+    # 注意：提交触发后更新聊天记录，gr.Blocks 可自动处理流式生成
+    msg.submit(
+        user,
+        inputs=[msg, state, system_prompt, temperature_slider],
+        outputs=[chatbot, state],
+        queue=True  # 确保消息按顺序处理
+    ).then(
+        lambda: "",  # 清空输入框
+        None,
+        msg
+    )
+    demo.queue()  # 启用队列以支持流式处理
+    demo.launch(share=True)
