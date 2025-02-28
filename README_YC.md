@@ -16,7 +16,10 @@
 测一下基础模型的能力，引入长思考链到模型的推理过程中。(一坨屎)
 
 ## 训练
+sudo -s
 
+conda activate nemo
+cd /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
 pip install -e ".[torch,metrics]"
 pip install deepspeed==0.14.5
 pip install flash-attn==2.6.2
