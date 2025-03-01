@@ -17,7 +17,7 @@ preprocessing_num_workers: 64
 
 
 ### output
-output_dir: saves/mistral-24b-linky/full/sft-20250228-tulu_deepseek_score_role_play-longCOT 
+output_dir: saves/mistral-24b-linky/full/sft-20250228-tulu_deepseek_score_role_play-longCOT_MultilTurn 
 logging_steps: 1
 save_steps: 200
 # save_strategy: epoch

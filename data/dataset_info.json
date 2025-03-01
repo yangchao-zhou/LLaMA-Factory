@@ -1,14 +1,16 @@
 {
   "deepseek_7_9_6875": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT/deepseek_7_9_6875_COT指令.jsonl",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT_MultiTurn/deepseek_7_9_13748_MultiTurn.jsonl",
     "columns": {
+      "system": "system",
       "prompt": "instruction",
       "query": "input",
-      "response": "output"
+      "response": "output",
+      "history": "history"
     }
   },
   "role_play_combined_data_20250221_3": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT/role_play_combined_data_20250221_3.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT_MultiTurn/role_play_combined_data_20250221_3.json",
     "columns": {
       "system": "system",
       "prompt": "instruction",
@@ -18,7 +20,7 @@
     }
   },
   "score_train_data_20250227": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT/train_data_20250228_COT指令.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT_MultiTurn/train_data_20250228.json",
     "columns": {
       "system": "system",
       "prompt": "instruction",
@@ -28,7 +30,7 @@
     }
   },
   "tulu_alpaca_percent5": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT/tulu_alpaca_percent5.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT_MultiTurn/tulu_alpaca_percent5.json",
     "columns": {
       "system": "system",
       "prompt": "instruction",
