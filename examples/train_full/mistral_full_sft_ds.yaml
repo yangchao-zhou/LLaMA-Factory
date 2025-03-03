@@ -1,6 +1,7 @@
 ### model
 # model_name_or_path: /maindata/data/shared/ai_story_workspace-dsw/nlp_models/mistralai/Mistral-Small-24B-Instruct-2501
 model_name_or_path: /maindata/data/shared/public/yangchao.zhou/models/mistralai/Mistral-Small-24B-Base-2501
+# model_name_or_path: /maindata/data/shared/public/yangchao.zhou/models/mistralai/Mistral-Nemo-Base-2407
 ### method
 stage: sft
 do_train: true
@@ -8,16 +9,17 @@ finetuning_type: full
 deepspeed: examples/deepspeed/ds_z3_offload_config.json
 
 ### dataset linky_score_20250221,
-dataset: tulu_alpaca_percent5,deepseek_7_9_6875,role_play_combined_data_20250221_3,score_train_data_20250227
+# dataset: tulu_alpaca_percent5,deepseek_7_9_6875,role_play_combined_data_20250221_3,score_train_data_20250227
+dataset: role_play_combined_data_20250221_3
 template: mistral
 cutoff_len: 8192
 max_samples: 1000000000000
 overwrite_cache: true
-preprocessing_num_workers: 64
+preprocessing_num_workers: 120
 
 
 ### output
-output_dir: saves/mistral-24b-linky/full/sft-20250228-tulu_deepseek_score_role_play-longCOT_MultilTurn 
+output_dir: saves/mistral-24b-linky/full/sft-20250303-tulu_deepseek_score_role_play-longCOT_MultilTurn-24B 
 logging_steps: 1
 save_steps: 200
 # save_strategy: epoch

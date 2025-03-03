@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-TINY_LLAMA = os.getenv("TINY_LLAMA", "llamafactory/tiny-random-Llama-3")
+TINY_LLAMA = os.getenv("TINY_LLAMA", "/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/mistral-24b-linky/full/sft-20250228-tulu_deepseek_score_role_play-longCOT_MultilTurn/checkpoint-3776")
 
 MESSAGES = [
     {"role": "user", "content": "How are you"},
@@ -119,6 +119,7 @@ def test_jinja_template(use_fast: bool):
     assert tokenizer.chat_template != ref_tokenizer.chat_template
     assert tokenizer.apply_chat_template(MESSAGES) == ref_tokenizer.apply_chat_template(MESSAGES)
 
+test_jinja_template(use_fast=False)
 
 def test_ollama_modelfile():
     tokenizer = AutoTokenizer.from_pretrained(TINY_LLAMA)
