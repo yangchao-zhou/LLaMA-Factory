@@ -1,6 +1,6 @@
 {
   "deepseek_7_9_6875": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT_MultiTurn/deepseek_7_9_13748_MultiTurn.jsonl",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250304_long_COT_MultiTurn/deepseek_7_9_13748_MultiTurn.jsonl",
     "columns": {
       "system": "system",
       "prompt": "instruction",
@@ -9,18 +9,16 @@
       "history": "history"
     }
   },
-  "role_play_combined_data_20250221_3": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT_MultiTurn/role_play_combined_data_20250221_3.json",
+  "role_play_combined_data_202500304_3": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/role_play/线上使用的-20250304/train/combined_data_20250304_过采样_3.json",
+    "formatting": "sharegpt",
     "columns": {
-      "system": "system",
-      "prompt": "instruction",
-      "query": "input",
-      "response": "output",
-      "history": "history"
+      "messages": "conversations",
+      "system": "system"
     }
   },
-  "score_train_data_20250227": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT_MultiTurn/train_data_20250228.json",
+  "score_train_data_20250304": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250304_long_COT_MultiTurn/train_data_20250304.json",
     "columns": {
       "system": "system",
       "prompt": "instruction",
@@ -30,7 +28,7 @@
     }
   },
   "tulu_alpaca_percent5": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250228_long_COT_MultiTurn/tulu_alpaca_percent5.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250304_long_COT_MultiTurn/tulu_alpaca_percent5.json",
     "columns": {
       "system": "system",
       "prompt": "instruction",
@@ -108,12 +106,11 @@
         "response": "output"
       }
     },
-    "linky_241210": {
-      "file_name": "linky/ES-cleaned_labeled_data-20241210_dedup-20241212-sfw.json",
+    "sharegpt_test": {
+      "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/train_data_20250226-sharegpt.json",
       "formatting": "sharegpt",
       "columns": {
-        "messages": "conversations",
-        "system": "system"
+        "messages": "conversations"
       }
     },
     "identity": {

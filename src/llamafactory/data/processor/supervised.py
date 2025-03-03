@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pdb
 
 from collections import defaultdict
 from dataclasses import dataclass
@@ -90,6 +91,7 @@ class SupervisedDatasetProcessor(DatasetProcessor):
         # for multiturn examples, we only mask the prompt part in each prompt-response pair.
         model_inputs = defaultdict(list)
         for i in range(len(examples["_prompt"])):
+            # TODO 角色扮演特殊处理
             if len(examples["_prompt"][i]) % 2 != 1 or len(examples["_response"][i]) != 1:
                 logger.warning_rank0(
                     "Dropped invalid example: {}".format(examples["_prompt"][i] + examples["_response"][i])
@@ -133,6 +135,7 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
         lengths = []
         length2indexes = defaultdict(list)
         for i in range(len(examples["_prompt"])):
+            # TODO 角色扮演特殊处理
             if len(examples["_prompt"][i]) % 2 != 1 or len(examples["_response"][i]) != 1:
                 logger.warning_rank0(
                     "Dropped invalid example: {}".format(examples["_prompt"][i] + examples["_response"][i])
