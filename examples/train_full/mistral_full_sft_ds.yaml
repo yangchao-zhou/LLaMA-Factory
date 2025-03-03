@@ -11,7 +11,7 @@ deepspeed: examples/deepspeed/ds_z3_offload_config.json
 ### dataset linky_score_20250221,
 # dataset: tulu_alpaca_percent5,deepseek_7_9_6875,role_play_combined_data_20250221_3,score_train_data_20250227
 dataset: role_play_combined_data_20250221_3
-template: mistral
+template: mistral_small
 cutoff_len: 8192
 max_samples: 1000000000000
 overwrite_cache: true
