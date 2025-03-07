@@ -1,20 +1,20 @@
 ### model
-# model_name_or_path: /maindata/data/shared/ai_story_workspace-dsw/nlp_models/mistralai/Mistral-Small-24B-Instruct-2501
-model_name_or_path: /maindata/data/shared/public/yangchao.zhou/models/mistralai/Mistral-Small-24B-Base-2501
+model_name_or_path: /maindata/data/shared/public/yangchao.zhou/models/Qwen/Qwen2.5-32B
+# model_name_or_path: /maindata/data/shared/public/yangchao.zhou/models/mistralai/Mistral-Small-24B-Base-2501
 # model_name_or_path: /maindata/data/shared/public/yangchao.zhou/models/mistralai/Mistral-Nemo-Base-2407
 ### method
 stage: sft
 do_train: true
-# finetuning_type: full
-finetuning_type: freeze
-freeze_trainable_layers: 20
-freeze_trainable_modules: all
+finetuning_type: full
+# finetuning_type: freeze
+# freeze_trainable_layers: 20
+# freeze_trainable_modules: all
 deepspeed: examples/deepspeed/ds_z3_offload_config.json
 
 ### dataset linky_score_20250221,
 # dataset: tulu_alpaca_percent5,deepseek_7_9_6875,role_play_combined_data_202500304_3,score_train_data_20250304,lima
 dataset: role_play_combined_data_202500304_3,lima
-template: mistral_small_npc
+template: qwen
 # template: mistral
 cutoff_len: 8192
 max_samples: 1000000000000
@@ -23,19 +23,20 @@ preprocessing_num_workers: 120
 
 
 ### output
-output_dir: saves/mistral-24b-linky/full/sft-20250307-role_play6-lima-24B-npctmp
+output_dir: saves/qwen-24b-linky/full/20250306-role_play6-lima-32B
+# output_dir: saves/mistral-24b-linky/full/sft-20250306-role_play6-lima-24B-qwen
 logging_steps: 1
 # save_steps: 100
 save_strategy: epoch
-save_total_limit: 15
+save_total_limit: 5
 plot_loss: true
-overwrite_output_dir: true
+# overwrite_output_dir: true
 
 ### train
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 2
-learning_rate: 1.0e-6
-num_train_epochs: 15.0
+learning_rate: 3.0e-6
+num_train_epochs: 4.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.03
 # warmup_steps: 50

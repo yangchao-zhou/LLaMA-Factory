@@ -40,6 +40,15 @@
 对话应该活灵活现，非常像一个真实的人
 intro  和 greeting放在最后
 
+
+  "role_play_combined_data_202500304_3": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/need_merge_data/250304_long_COT_MultiTurn/combined_data_20250304_过采样_3_greeting.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "system": "system"
+    }
+    
 ## 训练
 sudo -s
 

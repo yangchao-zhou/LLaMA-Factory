@@ -1256,8 +1256,42 @@ register_template(
     format_observation=StringFormatter(slots=["""[TOOL_RESULTS]{"content": {{content}}}[/TOOL_RESULTS]"""]),
     format_tools=ToolFormatter(tool_format="mistral"),
     format_prefix=EmptyFormatter(slots=[{"bos_token"}]),
-    template_class=MistralSmallTemplate,
+    # template_class=MistralSmallTemplate,
 )
+
+
+# copied from chatml template
+# register_template(
+#     name="mistral_small_npc",
+#     format_user=StringFormatter(slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
+#     format_assistant=StringFormatter(slots=["{{content}}<|im_end|>\n"]),
+#     format_system=StringFormatter(slots=["<|im_start|>system\n{{content}}<|im_end|>\n"]),
+#     format_observation=StringFormatter(slots=["<|im_start|>tool\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
+#     stop_words=["<|im_end|>", "<|im_start|>"],
+#     replace_eos=True,
+#     replace_jinja_template=True,
+# )
+
+# 注册模板，将对话中的 "assistant" 修改为 "NPC"
+register_template(
+    name="mistral_small_npc",
+    format_user=StringFormatter(
+        slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>NPC\n"]
+    ),
+    format_assistant=StringFormatter(
+        slots=["{{content}}<|im_end|>\n"]
+    ),
+    format_system=StringFormatter(
+        slots=["<|im_start|>system\n{{content}}<|im_end|>\n"]
+    ),
+    format_observation=StringFormatter(
+        slots=["<|im_start|>tool\n{{content}}<|im_end|>\n<|im_start|>NPC\n"]
+    ),
+    stop_words=["<|im_end|>", "<|im_start|>"],
+    replace_eos=True,
+    replace_jinja_template=True,
+)
+
 
 
 register_template(
