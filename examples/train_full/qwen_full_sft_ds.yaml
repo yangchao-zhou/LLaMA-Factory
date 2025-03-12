@@ -28,7 +28,7 @@ output_dir: saves/qwen-24b-linky/full/20250306-role_play6-lima-32B
 logging_steps: 1
 # save_steps: 100
 save_strategy: epoch
-save_total_limit: 5
+save_total_limit: 10
 plot_loss: true
 # overwrite_output_dir: true
 
@@ -36,7 +36,7 @@ plot_loss: true
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 2
 learning_rate: 3.0e-6
-num_train_epochs: 4.0
+num_train_epochs: 10.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.03
 # warmup_steps: 50

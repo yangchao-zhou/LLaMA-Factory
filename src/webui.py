@@ -26,7 +26,5 @@ def main():
     # create_ui().queue().launch(share=gradio_share, server_name=server_name, inbrowser=True)
 
 
-
-
 if __name__ == "__main__":
     main()

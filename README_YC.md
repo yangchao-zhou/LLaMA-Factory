@@ -53,6 +53,7 @@ intro  和 greeting放在最后
 sudo -s
 
 conda activate nemo
+
 cd /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
 pip install -e ".[torch,metrics]"
 pip install deepspeed==0.14.5

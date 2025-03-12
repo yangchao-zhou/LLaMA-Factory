@@ -1,4 +1,12 @@
 {
+  "generate_role_play_data_20250304_过采样_3": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/role_play/角色扮演生产数据/角色扮演生产数据/20250310/train/combined_data_20250304_过采样_3.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
   "deepseek_5_9_9922": {
     "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/deepseek/deepseek_5_9_9922_MultiTurn.jsonl",
     "columns": {
@@ -217,7 +225,7 @@
       }
     },
     "lima": {
-      "hf_hub_url": "llamafactory/lima",
+      "file_name": "/maindata/data/shared/public/yangchao.zhou/data/llamafactory/lima/lima.json",
       "formatting": "sharegpt"
     },
     "guanaco": {
