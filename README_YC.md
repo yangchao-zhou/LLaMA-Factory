@@ -10,10 +10,8 @@
 试试之前指令模型开始训练的效果
 
 生成聊天数据的数据
-如何让history 不参与训练
+如何让history不参与训练
 请用长思维链的方式回答。回答之前先思考一下，长思维链的内容在<think>和</think>之间。思维链之外的内容才是真的回答
-
-测一下基础模型的能力，引入长思考链到模型的推理过程中。(一坨屎)
 
 请用长思维链的方式回答。回答之前先思考一下：
 1. 用户的意图，
@@ -50,6 +48,7 @@ intro  和 greeting放在最后
     }
     
 ## 训练
+```
 sudo -s
 
 conda activate nemo
@@ -70,10 +69,9 @@ nohup llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml > trai
 
 sudo chown -R ran.xiao /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
 sudo chmod -R 777 /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/
-sudo chmod -R 777 /maindata/data/shared/public/yangchao.zhou/projects/spanish
-
+```
 ## 部署网页版
-
+```
 conda activate nemo
 
 export CUDA_VISIBLE_DEVICES=0
@@ -128,3 +126,4 @@ sudoserviceatdstart
 sudoserviceatdstatus
 
 echo "nohup /maindata/data/shared/public/yangchao.zhou/anaconda3/envs/mistral/bin/python /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/tests/test_gpu_mem.py > test_gpu_mem.log 2>&1 &" | at now + 1 hour
+```

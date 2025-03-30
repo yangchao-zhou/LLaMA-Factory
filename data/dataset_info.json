@@ -7,6 +7,48 @@
       "response": "output"
     }
   },
+  "hle_error_data_gpt": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_error_data_gpt.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "hle_error_data_qwen72B": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_error_data_qwen72B.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "hle_processed_data_gpt": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_processed_data_gpt.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "hle_processed_data_qwen72B": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_processed_data_qwen72B.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "generate_comment_score": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/score_comment/comment_score_20250319.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
   "deepseek_5_9_9922": {
     "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/deepseek/deepseek_5_9_9922_MultiTurn.jsonl",
     "columns": {
@@ -117,7 +159,7 @@
       }
     },
     "sharegpt_test": {
-      "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/train_data_20250226-sharegpt.json",
+      "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/20250226-sharegpt/train/质检-V4.1_3point_corpus_12.20 232rn-20250102_1.json",
       "formatting": "sharegpt",
       "columns": {
         "messages": "conversations"

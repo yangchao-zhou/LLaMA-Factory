@@ -7,6 +7,7 @@ ps -ef | grep linky_score.py
 '''
 from transformers import pipeline
 import torch
+import re
 import json
 from tqdm import tqdm
 import pandas as pd
@@ -18,7 +19,7 @@ class ModelEvaluator:
     def __init__(self, model_path, data_path):
         self.model_path = model_path
         self.data_path = data_path
-        self.chatbot = pipeline("text-generation", model=model_path, device='cuda:0', max_new_tokens=8192, torch_dtype=torch.bfloat16)
+        self.chatbot = pipeline("text-generation", model=model_path, device_map="auto", max_new_tokens=8192, torch_dtype="auto")
         self.data = self.load_data(data_path)
 
     def load_data(self, data_path):
@@ -85,28 +86,24 @@ class ModelEvaluator:
 
     @staticmethod
     def extract_score(text):
-        import re
+       
         match = re.search(r'Score:\s*(\d)', text)
         return int(match.group(1)) if match else None
 
+
     @staticmethod
     def extract_fields(text):
-        import re
-        
-        reason_advantage_match = re.search(r'Reason-advantage:\s*(.*?)\n', text)
-        reason_disadvantage_match = re.search(r'Reason-disadvantage:\s*(.*?)\n', text)
-        comment_match = re.search(r'Comment:\s*(.*?)\n', text)
-        
-        score_match = re.search(r'Score:\s*(\d)', text)
-        if not score_match:
-            score_match = re.search(r'\*\*Score\*\*:\s*(\d)', text)
-            comment_match = re.search(r'\*\*Comment\*\*:\s*(.*?)\n', text)
-        
-        reason_advantage = reason_advantage_match.group(1) if reason_advantage_match else None
-        reason_disadvantage = reason_disadvantage_match.group(1) if reason_disadvantage_match else None
+        reason_advantage_match = re.search(r'\*\*Reason-advantage\*\*:\s*(.*?)(?:\n|$)', text, re.DOTALL)
+        reason_disadvantage_match = re.search(r'\*\*Reason-disadvantage\*\*:\s*(.*?)(?:\n|$)', text, re.DOTALL)
+        comment_match = re.search(r'Comment:\s*(.*?)(?:\n|$)', text, re.DOTALL)
+        score_match = re.search(r'\*\*Score\*\*:\s*(\d+)', text)
+
+        reason_advantage = reason_advantage_match.group(1).strip() if reason_advantage_match else ""
+        reason_disadvantage = reason_disadvantage_match.group(1).strip() if reason_disadvantage_match else ""
+        comment = comment_match.group(1).strip() if comment_match else ""
         score = int(score_match.group(1)) if score_match else None
-        
-        return reason_advantage, reason_disadvantage, score, comment_match
+
+        return reason_advantage, reason_disadvantage, score, comment
 
     def run_evaluation(self):
         all_is_correct_score_list = []
@@ -194,10 +191,10 @@ class ModelEvaluator:
         # df.to_excel('evaluation/evaluation_results.xlsx', index=False)
 
 if __name__ == "__main__":
-    model_path = "/maindata/data/shared/ai_story_workspace-dsw/nlp_models/mistralai/Mistral-Small-24B-Instruct-2501"
+    model_path = "/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/sft-20250310-lima-generate-comment-score-24B/checkpoint-180"
     # model_path = "/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/mistral-24b-linky/full/sft-score-20250220/checkpoint-107/"
     # model_path = '/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/mistral-24b-linky/full/sft-score-20250221-lima-deepseek_10/checkpoint-400'
-    data_path = '/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/test_data_20250225.json'
+    data_path = '/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/test_data_20250319.json'
 
     evaluator = ModelEvaluator(model_path, data_path)
     evaluator.run_evaluation()
