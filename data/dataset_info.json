@@ -7,6 +7,14 @@
       "response": "output"
     }
   },
+  "hle_almost_all_correct": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_all_correct.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
   "hle_error_data_gpt": {
     "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_error_data_gpt.json",
     "columns": {
@@ -24,7 +32,7 @@
     }
   },
   "hle_processed_data_gpt": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_processed_data_gpt.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/correct/hle_processed_data_gpt.json",
     "columns": {
       "prompt": "instruction",
       "query": "input",
@@ -32,7 +40,7 @@
     }
   },
   "hle_processed_data_qwen72B": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_processed_data_qwen72B.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/correct/hle_processed_data_qwen72B.json",
     "columns": {
       "prompt": "instruction",
       "query": "input",

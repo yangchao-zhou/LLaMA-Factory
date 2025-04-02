@@ -13,7 +13,7 @@ deepspeed: examples/deepspeed/ds_z3_offload_config.json
 
 ### dataset linky_score_20250221,
 # dataset: tulu_alpaca_percent5,deepseek_7_9_6875,role_play_combined_data_202500304_3,score_train_data_20250304,lima,generate_role_play_data_20250304_过采样_3
-dataset: hle_error_data_gpt,hle_error_data_qwen72B,hle_processed_data_gpt,hle_processed_data_qwen72B
+dataset: hle_processed_data_gpt,hle_processed_data_qwen72B
 # template: mistral_small_npc
 template: mistral_small
 cutoff_len: 8192
@@ -23,17 +23,17 @@ preprocessing_num_workers: 120
 
 
 ### output
-output_dir: saves/full/sft-20250310-lima-generate_comment_score-deepseek-role_play-24B
+output_dir: saves/full/mistral-24B-sft-20250331-hle-gpt-qwen-true-test
 logging_steps: 1
 # save_steps: 100
 save_strategy: epoch
 save_total_limit: 10
 plot_loss: true
-overwrite_output_dir: true
+# overwrite_output_dir: true
 
 ### train
 per_device_train_batch_size: 2
-gradient_accumulation_steps: 2
+gradient_accumulation_steps: 1
 learning_rate: 3.0e-6
 num_train_epochs: 5.0
 lr_scheduler_type: cosine
@@ -42,7 +42,7 @@ warmup_ratio: 0.03
 bf16: true
 ddp_timeout: 180000000
 flash_attn: fa2
-resume_from_checkpoint: true
+# resume_from_checkpoint: true
 
 ### eval
 # val_size: 0.01

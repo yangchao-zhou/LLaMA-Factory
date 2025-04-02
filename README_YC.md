@@ -48,9 +48,11 @@ intro  和 greeting放在最后
     }
     
 ## 训练
-```
-sudo -s
 
+### 单节点SFT
+```
+pkill -f "llamafactory"
+sudo -s
 conda activate nemo
 
 cd /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
@@ -66,10 +68,45 @@ conda activate nemo
 export CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7
 llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml
 nohup llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml > train_output.log 2>&1 &
+nohup llamafactory-cli train examples/train_full/qwq_full_sft_ds.yaml > train_output_qwq-1.log 2>&1 &
 
 sudo chown -R ran.xiao /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
 sudo chmod -R 777 /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/
+
 ```
+
+### 在多机上进行指令监督微调
+
+```bash
+pkill -f "llamafactory"
+三个节点的公网ip
+10.1.16.59
+10.1.16.66
+10.1.16.77
+10.1.16.57
+
+检测是否端口被占
+netstat -tulnp | grep 29500
+
+export  PYTHONPATH=`pwd`
+export  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8
+export TMPDIR=/maindata/data/shared/public/yangchao.zhou/projects/tmp
+export NCCL_SOCKET_IFNAME=eth1
+ # 根据 ifconfig 结果选择正确的网卡，如 eth1
+
+# FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
+# FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
+# FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
+# FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
+
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-0.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-1.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-2.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-3.log 2>&1 &
+
+
+```
+
 ## 部署网页版
 ```
 conda activate nemo
@@ -82,19 +119,17 @@ lmdeploy serve gradio /maindata/data/shared/public/yangchao.zhou/models/mistrala
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 lmdeploy serve gradio /maindata/data/shared/ai_story_workspace-dsw/nlp_models/mistralai/Mistral-Small-24B-Instruct-2501 --tp 8
-
+```
 ## vllm 部署
-nohup vllm serve /maindata/data/shared/ai_story_workspace-dsw/nlp_models/mistralai/Mistral-Small-24B-Instruct-2501 --tokenizer_mode mistral --config_format mistral --load_format mistral --tool-call-parser mistral --enable-auto-tool-choice --tensor-parallel-size 8 --port 8000 \
- > Mistral-Small-24B.log 2>&1 &
- 
-vllm serve /maindata/data/shared/ai_story_workspace-dsw/nlp_models/mistralai/Mistral-Small-24B-Instruct-2501 --tensor-parallel-size 8 --port 8000
-
-nohup python -m vllm.entrypoints.openai.api_server \
-    --model /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/mistral-24b-linky/full/sft-20250226-tulu_deepseek_score_role_play/checkpoint-1500\
+pkill -f "vllm"
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/qwen-72b-ins/full/20250401-hle-gpt-qwen-true/checkpoint-296\
+    --task generate \
     --tensor-parallel-size 8 \
-    --disable-custom-all-reduce \
-    --trust-remote-code \
-    --port 8000 > Mistral-Small-24B.log 2>&1 &
+    --port 8001 \
+    --served-model-name let_it_out \
+    --gpu-memory-utilization 0.9 \
+    > vllm-qwen-72b-sft-20250401-hle-gpt-qwen-true.log 2>&1 &
+
 
 ## eval
 
