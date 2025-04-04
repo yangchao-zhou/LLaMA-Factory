@@ -49,6 +49,12 @@ intro  和 greeting放在最后
     
 ## 训练
 
+### 单节点PT
+
+```
+nohup llamafactory-cli train examples/train_full/mistral_pt_ds.yaml > train_pt_output.log 2>&1 &
+```
+
 ### 单节点SFT
 ```
 pkill -f "llamafactory"
@@ -99,27 +105,16 @@ export NCCL_SOCKET_IFNAME=eth1
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-0.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-1.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-2.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-3.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-0.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-1.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-2.log 2>&1 &
+
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml' > train-3.log 2>&1 &
 
 
 ```
 
-## 部署网页版
-```
-conda activate nemo
 
-export CUDA_VISIBLE_DEVICES=0
-
-lmdeploy serve gradio /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/mistral-24b-linky/full/sft-20250226-tulu_deepseek_score_role_play/checkpoint-1500
-lmdeploy serve gradio /maindata/data/shared/ai_story_workspace-dsw/nlp_models/mistralai/Mistral-Small-24B-Instruct-2501
-lmdeploy serve gradio /maindata/data/shared/public/yangchao.zhou/models/mistralai/Mistral-Small-24B-Base-2501
-
-export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
-lmdeploy serve gradio /maindata/data/shared/ai_story_workspace-dsw/nlp_models/mistralai/Mistral-Small-24B-Instruct-2501 --tp 8
-```
 ## vllm 部署
 pkill -f "vllm"
 nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/qwen-72b-ins/full/20250401-hle-gpt-qwen-true/checkpoint-296\

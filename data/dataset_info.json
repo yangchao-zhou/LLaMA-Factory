@@ -7,6 +7,84 @@
       "response": "output"
     }
   },
+  "AIME_2024_processed_data_gpt": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/AIME_2024_processed_data_gpt.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "AIME_2025_processed_data_gpt": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/AIME_2025_processed_data_gpt.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "gpqa-diamond_processed_data_gpt": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/gpqa-diamond_processed_data_gpt.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "usamo_2025_processed_data_gpt": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/usamo_2025_processed_data_gpt.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "hle_qwen_gpt_pt": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_qwen_gpt_pt.json",
+    "columns": {
+      "prompt": "text"
+    }
+  },
   "hle_almost_all_correct": {
     "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/hle_all_correct.json",
     "columns": {
