@@ -51,12 +51,12 @@ intro  和 greeting放在最后
 
 ### 单节点PT
 
-```
+```bash
 nohup llamafactory-cli train examples/train_full/mistral_pt_ds.yaml > train_pt_output.log 2>&1 &
 ```
 
 ### 单节点SFT
-```
+```bash
 pkill -f "llamafactory"
 sudo -s
 conda activate nemo
@@ -85,6 +85,8 @@ sudo chmod -R 777 /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Fact
 
 ```bash
 pkill -f "llamafactory"
+pkill -f "vllm"
+watch -n 1 gpustat
 三个节点的公网ip
 10.1.16.59
 10.1.16.66
@@ -105,27 +107,76 @@ export NCCL_SOCKET_IFNAME=eth1
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-0.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-1.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-2.log 2>&1 &
-
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml' > train-3.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-0.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-1.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-2.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-3.log 2>&1 &
 
 
 ```
 
+### 单节点强化学习
+```bash
+llamafactory-cli train examples/train_full/mistral_full_rl_ds.yaml
+```
+
+### 在多机上进行强化学习
+
+```bash
+pkill -f "llamafactory"
+pkill -f "vllm"
+watch -n 1 gpustat
+
+export  PYTHONPATH=`pwd`
+export  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8
+export TMPDIR=/maindata/data/shared/public/yangchao.zhou/projects/tmp
+export NCCL_SOCKET_IFNAME=eth1
+
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_rl_ds.yaml' > train-0.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_rl_ds.yaml' > train-1.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_rl_ds.yaml' > train-2.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_rl_ds.yaml' > train-3.log 2>&1 &
+
+```
 
 ## vllm 部署
+
+export  PYTHONPATH=`pwd`
+export  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8
+export TMPDIR=/maindata/data/shared/public/yangchao.zhou/projects/tmp
+export NCCL_SOCKET_IFNAME=eth1
 pkill -f "vllm"
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/qwen-72b-ins/full/20250401-hle-gpt-qwen-true/checkpoint-296\
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250406/checkpoint-450\
     --task generate \
     --tensor-parallel-size 8 \
     --port 8001 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.9 \
-    > vllm-qwen-72b-sft-20250401-hle-gpt-qwen-true.log 2>&1 &
+    > vllm_logs/vllm-Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250406.log 2>&1 &
+
+pkill -f "llamafactory"
+pkill -f "vllm"
+watch -n 1 gpustat
 
 
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/dpo/Llama-33-70b-ins-rl_AIME_gpqa-diamond_HLE_usamo_20250407-2/checkpoint-7\
+    --task generate \
+    --tensor-parallel-size 8 \
+    --port 8001 \
+    --served-model-name let_it_out \
+    --gpu-memory-utilization 0.5 \
+    > vllm_logs/vllm-Llama-33-70b-ins-rl_AIME_gpqa-diamond_HLE_usamo_20250407-1.log 2>&1 &
+
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-31-8b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407/checkpoint-444\
+    --task generate \
+    --tensor-parallel-size 8 \
+    --port 8001 \
+    --served-model-name let_it_out \
+    --gpu-memory-utilization 0.5 \
+    > vllm_logs/vllm-Llama-31-8b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407-8000.log 2>&1 &
+
+
+    
 ## eval
 
 conda activate nemo
