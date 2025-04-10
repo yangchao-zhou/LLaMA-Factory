@@ -16,6 +16,11 @@ import os
 import sys
 from typing import TYPE_CHECKING, Dict, Literal, Optional, Sequence, Union
 
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.backends import default_backend
+
 import numpy as np
 from datasets import DatasetDict, load_dataset, load_from_disk
 
@@ -35,6 +40,7 @@ from .processor import (
 )
 
 
+
 if TYPE_CHECKING:
     from datasets import Dataset, IterableDataset
     from transformers import PreTrainedTokenizer, ProcessorMixin, Seq2SeqTrainingArguments
@@ -48,6 +54,33 @@ if TYPE_CHECKING:
 
 logger = logging.get_logger(__name__)
 
+
+def generate_key(password: str, salt: bytes) -> bytes:
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt,
+        iterations=100000,
+        backend=default_backend()
+    )
+    return kdf.derive(password.encode())
+
+def decrypt_file(input_file: str, password: str):
+    output_file = input_file.replace('.bin', '.json')
+    with open(input_file, 'rb') as f:
+        data = f.read()
+
+    salt = data[:16]
+    iv = data[16:32]
+    ciphertext = data[32:]
+    key = generate_key(password, salt)
+
+    cipher = Cipher(algorithms.AES(key), modes.CFB(iv), backend=default_backend())
+    decryptor = cipher.decryptor()
+    plaintext = decryptor.update(ciphertext) + decryptor.finalize()
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(plaintext.decode())
+    return output_file
 
 def _load_single_dataset(
     dataset_attr: "DatasetAttr",
@@ -73,15 +106,18 @@ def _load_single_dataset(
     elif dataset_attr.load_from == "file":
         data_files = []
         local_path = os.path.join(data_args.dataset_dir, dataset_attr.dataset_name)
+
         if os.path.isdir(local_path):  # is directory
             for file_name in os.listdir(local_path):
                 data_files.append(os.path.join(local_path, file_name))
         elif os.path.isfile(local_path):  # is file
             data_files.append(local_path)
+            print(f"data_files: {data_files}")
         else:
             raise ValueError(f"File {local_path} not found.")
 
         data_path = FILEEXT2TYPE.get(os.path.splitext(data_files[0])[-1][1:], None)
+       
         if data_path is None:
             raise ValueError("Allowed file types: {}.".format(",".join(FILEEXT2TYPE.keys())))
 
@@ -126,6 +162,11 @@ def _load_single_dataset(
             streaming=data_args.streaming,
         )
     else:
+        for i in range(len(data_files)):
+            if ".bin" in data_files[i]:
+                data_file = decrypt_file(data_files[i], "rshgmh")
+                data_files[i] = data_file
+
         dataset = load_dataset(
             path=data_path,
             name=data_name,
@@ -138,6 +179,11 @@ def _load_single_dataset(
             num_proc=data_args.preprocessing_num_workers,
             trust_remote_code=model_args.trust_remote_code,
         )
+
+        for i in range(len(data_files)):
+            if ".bin" in data_files[i]:
+                os.remove(local_path)
+                # print(f"删除文件: {local_path}")
 
     if dataset_attr.num_samples is not None and not data_args.streaming:
         target_num = dataset_attr.num_samples

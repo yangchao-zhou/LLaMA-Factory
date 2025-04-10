@@ -74,7 +74,7 @@
     }
   },
   "AIME_2025_processed_data_gpt": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/AIME_2025_processed_data_gpt.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/AIME_2025_processed_data_gpt.bin",
     "columns": {
       "prompt": "instruction",
       "query": "input",
@@ -82,7 +82,7 @@
     }
   },
   "AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250406_2give_ans.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250406_2give_ans.bin",
     "columns": {
       "prompt": "query",
       "query": "input",
@@ -90,7 +90,7 @@
     }
   },
   "gpqa-diamond_processed_data_gpt": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/gpqa-diamond_processed_data_gpt.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/gpqa-diamond_processed_data_gpt.bin",
     "columns": {
       "prompt": "instruction",
       "query": "input",

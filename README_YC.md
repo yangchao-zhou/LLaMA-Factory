@@ -52,7 +52,7 @@ intro  和 greeting放在最后
 ### 单节点PT
 
 ```bash
-nohup llamafactory-cli train examples/train_full/mistral_pt_ds.yaml > train_pt_output.log 2>&1 &
+nohup llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml > train_mistral_full_sft_ds_output.log 2>&1 &
 ```
 
 ### 单节点SFT
@@ -107,10 +107,10 @@ export NCCL_SOCKET_IFNAME=eth1
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-0.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-1.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-2.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds.yaml' > train-3.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-0.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-1.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-2.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-3.log 2>&1 &
 
 
 ```
