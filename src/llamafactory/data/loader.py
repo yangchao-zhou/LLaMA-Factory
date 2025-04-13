@@ -180,9 +180,9 @@ def _load_single_dataset(
             trust_remote_code=model_args.trust_remote_code,
         )
 
-        for i in range(len(data_files)):
-            if ".bin" in data_files[i]:
-                os.remove(local_path)
+        # for i in range(len(data_files)):
+        #     if ".bin" in data_files[i]:
+        #         os.remove(local_path)
                 # print(f"删除文件: {local_path}")
 
     if dataset_attr.num_samples is not None and not data_args.streaming:

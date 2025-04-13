@@ -73,7 +73,9 @@ export TMPDIR=/maindata/data/shared/public/yangchao.zhou/projects/tmp
 conda activate nemo
 export CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7
 llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml
-nohup llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml > train_output.log 2>&1 &
+
+nohup llamafactory-cli train examples/train_full/mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo.yaml > train_output-mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo.log 2>&1 &
+
 nohup llamafactory-cli train examples/train_full/qwq_full_sft_ds.yaml > train_output_qwq-1.log 2>&1 &
 
 sudo chown -R ran.xiao /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
@@ -159,21 +161,21 @@ pkill -f "vllm"
 watch -n 1 gpustat
 
 
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/dpo/Llama-33-70b-ins-rl_AIME_gpqa-diamond_HLE_usamo_20250407-2/checkpoint-7\
+nohup vllm serve /aisocial/shejiao/yangchao.zhou/projects/LLaMA-Factory/saves/full/qwen-25-72b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407/checkpoint-518\
     --task generate \
     --tensor-parallel-size 8 \
     --port 8001 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.5 \
-    > vllm_logs/vllm-Llama-33-70b-ins-rl_AIME_gpqa-diamond_HLE_usamo_20250407-1.log 2>&1 &
+    > vllm_logs/qwen-25-72b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407-1.log 2>&1 &
 
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-31-8b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407/checkpoint-444\
+nohup vllm serve /aisocial/shejiao/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-31-8b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407\
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8001 \
+    --port 8000 \
     --served-model-name let_it_out \
-    --gpu-memory-utilization 0.5 \
-    > vllm_logs/vllm-Llama-31-8b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407-8000.log 2>&1 &
+    --gpu-memory-utilization 0.45 \
+    > vllm_logs/vllm-Llama-31-8b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407-1.log 2>&1 &
 
 
     

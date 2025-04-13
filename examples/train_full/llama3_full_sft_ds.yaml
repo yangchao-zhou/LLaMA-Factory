@@ -1,6 +1,6 @@
 ### model
-# model_name_or_path: /maindata/data/shared/public/common_models/Llama-3.3-70B-Instruct
-model_name_or_path: /maindata/data/shared/public/common_models/Meta-Llama-3.1-8B-Instruct
+# model_name_or_path: /aisocial/shejiao/common_models/Llama-3.3-70B-Instruct
+model_name_or_path: /aisocial/shejiao/common_models/Llama-3.3-70B-Instruct
 ### method
 stage: sft
 do_train: true
