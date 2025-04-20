@@ -1,12 +1,15 @@
-from transformers import AutoTokenizer
+import torch
 
-model_path = "/maindata/data/shared/public/yangchao.zhou/models/mistralai/Mistral-Nemo-Base-2407"
+def load_training_args(file_path):
+    try:
+        # 尝试使用 torch 加载
+        data = torch.load(file_path, map_location="cpu")
+        print("Loaded data:", data)
+        return data
+    except Exception as e:
+        print(f"Failed to load using torch: {e}")
+        return None
 
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-
-# 确保 chat_template 被正确加载
-print(tokenizer.chat_template)
-
-new_model_path = "/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/tests"
-tokenizer.save_pretrained(model_path)
-print(f"模型已保存到 {new_model_path}。")
+if __name__ == "__main__":
+    file_path = "saves/full/Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250404/training_args.bin"
+    load_training_args(file_path)

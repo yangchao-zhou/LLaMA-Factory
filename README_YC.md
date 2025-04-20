@@ -49,6 +49,25 @@ intro  和 greeting放在最后
     
 ## 训练
 
+### 火山分布式SFT
+pkill -f "llamafactory"
+
+export  PYTHONPATH=`pwd`
+export  PYTHONPATH=/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
+export  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8
+export TMPDIR=/maindata/data/shared/public/yangchao.zhou/projects/tmp
+export NCCL_SOCKET_IFNAME=eth1
+
+cd /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/
+
+conda activate nemo
+
+rm -rf train-$MLP_ROLE_INDEX.log
+
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX MASTER_ADDR=$MLP_WORKER_0_HOST MASTER_PORT=$MLP_WORKER_0_PORT  /root/miniconda3/envs/nemo/bin/llamafactory-cli train /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/examples/train_full/llama3_full_sft_ds.yaml' > train-$MLP_ROLE_INDEX.log 2>&1 &
+
+tail -f train-$MLP_ROLE_INDEX.log
+
 ### 单节点PT
 
 ```bash
@@ -76,6 +95,8 @@ llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml
 
 nohup llamafactory-cli train examples/train_full/mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo.yaml > train_output-mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo.log 2>&1 &
 
+nohup llamafactory-cli train examples/train_full/mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo_SWE-bench_Verified.yaml > train_output-mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo_SWE-bench_Verified.log 2>&1 &
+
 nohup llamafactory-cli train examples/train_full/qwq_full_sft_ds.yaml > train_output_qwq-1.log 2>&1 &
 
 sudo chown -R ran.xiao /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
@@ -99,6 +120,7 @@ watch -n 1 gpustat
 netstat -tulnp | grep 29500
 
 export  PYTHONPATH=`pwd`
+export  PYTHONPATH=/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
 export  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8
 export TMPDIR=/maindata/data/shared/public/yangchao.zhou/projects/tmp
 export NCCL_SOCKET_IFNAME=eth1
@@ -109,17 +131,18 @@ export NCCL_SOCKET_IFNAME=eth1
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-0.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-1.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-2.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-3.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-0.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-1.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-2.log 2>&1 &
 
+
+bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX MASTER_ADDR=$MLP_WORKER_0_HOST MASTER_PORT=$MLP_WORKER_0_PORT  /root/miniconda3/envs/nemo/bin/llamafactory-cli train /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/examples/train_full/llama3_full_sft_ds.yaml' 
 
 ```
 
 ### 单节点强化学习
 ```bash
-llamafactory-cli train examples/train_full/mistral_full_rl_ds.yaml
+nohup bash -c 'llamafactory-cli train examples/train_full/mistral_full_rl_ds.yaml' > mistral_full_rl_ds.log 2>&1 &
 ```
 
 ### 在多机上进行强化学习
@@ -161,21 +184,30 @@ pkill -f "vllm"
 watch -n 1 gpustat
 
 
-nohup vllm serve /aisocial/shejiao/yangchao.zhou/projects/LLaMA-Factory/saves/full/qwen-25-72b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407/checkpoint-518\
+nohup vllm serve saves/full/mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo_20250413/checkpoint-1480\
     --task generate \
     --tensor-parallel-size 8 \
     --port 8001 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.5 \
-    > vllm_logs/qwen-25-72b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407-1.log 2>&1 &
+    > vllm_logs/mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo_20250413-8002.log 2>&1 &
 
-nohup vllm serve /aisocial/shejiao/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-31-8b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407\
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_LCB_20250419/checkpoint-285\
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8000 \
+    --port 8001 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
-    > vllm_logs/vllm-Llama-31-8b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407-1.log 2>&1 &
+    > vllm_logs/vllm-Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_LCB_20250419.log 2>&1 &
+
+nohup vllm serve saves/dpo/mitral-24b-ins-rl_AIME_gpqa-diamond_HLE_usamo_facebook_SWE_20250413/checkpoint-494\
+    --task generate \
+    --tensor-parallel-size 8 \
+    --port 8001 \
+    --served-model-name let_it_out \
+    --gpu-memory-utilization 0.45 \
+    > vllm_logs/vllm-mitral-24b-ins-rl_AIME_gpqa-diamond_HLE_usamo_facebook_SWE_20250413-8004.log 2>&1 &
+
 
 
     
