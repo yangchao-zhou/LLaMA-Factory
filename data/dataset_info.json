@@ -7,18 +7,26 @@
       "response": "output"
     }
   },
-  "LCB4KIMI": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/generated_sft_data/LCB_processed_KIMI_data-true.json",
+  "LCB": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/processed_open_source/LCB_add_prompt.json",
+    "columns": {
+      "system": "system",
+      "prompt": "prompt",
+      "response": "output"
+    }
+  },
+  "LCB4openai": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/processed_open_source/LCB/LCB_processed_O1-2024-12-17_High_results_sft.json",
     "columns": {
       "prompt": "question_content",
       "response": "output"
     }
   },
   "LCB4Gemini": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/processed_open_source/LCB_processed_Gemini-2.5-Pro_results_sft.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/processed_open_source/LCB/LCB_processed_Gemini-2.5-Pro_results_sft.json",
     "columns": {
       "prompt": "question_content",
-      "response": "code"
+      "response": "output"
     }
   },
   "AIME2024": {

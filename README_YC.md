@@ -51,6 +51,9 @@ intro  和 greeting放在最后
 
 ### 火山分布式SFT
 pkill -f "llamafactory"
+watch -n 1 gpustat
+
+pkill -f "llamafactory"
 
 export  PYTHONPATH=`pwd`
 export  PYTHONPATH=/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
@@ -64,9 +67,11 @@ conda activate nemo
 
 rm -rf train-$MLP_ROLE_INDEX.log
 
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX MASTER_ADDR=$MLP_WORKER_0_HOST MASTER_PORT=$MLP_WORKER_0_PORT  /root/miniconda3/envs/nemo/bin/llamafactory-cli train /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/examples/train_full/llama3_full_sft_ds.yaml' > train-$MLP_ROLE_INDEX.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX MASTER_ADDR=$MLP_WORKER_0_HOST MASTER_PORT=$MLP_WORKER_0_PORT  /root/miniconda3/envs/nemo/bin/llamafactory-cli train /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/examples/train_full/mistral_full_sft_ds.yaml' > train-$MLP_ROLE_INDEX.log 2>&1 &
 
 tail -f train-$MLP_ROLE_INDEX.log
+
+
 
 ### 单节点PT
 
@@ -184,13 +189,13 @@ pkill -f "vllm"
 watch -n 1 gpustat
 
 
-nohup vllm serve saves/full/mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo_20250413/checkpoint-1480\
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/mistral-24B-ins-sft-LCB_Math_20250421_5e-6/checkpoint-488 \
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8001 \
+    --port 8000 \
     --served-model-name let_it_out \
-    --gpu-memory-utilization 0.5 \
-    > vllm_logs/mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo_20250413-8002.log 2>&1 &
+    --gpu-memory-utilization 0.45 \
+    > vllm_logs/mistral-24B-ins-sft-LCB_Math_20250421_5e-6-8001.log 2>&1 &
 
 nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_LCB_20250419/checkpoint-285\
     --task generate \
