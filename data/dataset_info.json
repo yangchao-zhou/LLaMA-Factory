@@ -7,6 +7,22 @@
       "response": "output"
     }
   },
+  "LCB_true": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/LCB_processed-true.json",
+    "columns": {
+      "system": "system",
+      "prompt": "prompt",
+      "response": "output"
+    }
+  },
+  "LCB_false_can_use": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/LCB_processed-false_can_use.json",
+    "columns": {
+      "system": "system",
+      "prompt": "prompt",
+      "response": "output"
+    }
+  },
   "LCB": {
     "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/processed_open_source/LCB_add_prompt.json",
     "columns": {

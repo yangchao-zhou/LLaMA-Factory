@@ -20,8 +20,9 @@ export NCCL_SOCKET_IFNAME=eth1
 # Change to the LLaMA-Factory project directory
 cd /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/
 
+conda init
 # Activate the conda environment 'nemo'
-source /root/miniconda3/bin/activate nemo
+conda activate nemo
 
 # Remove previous log file for the current role index, if it exists
 rm -rf train-$MLP_ROLE_INDEX.log

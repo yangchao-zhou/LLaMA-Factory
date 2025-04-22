@@ -71,7 +71,8 @@ nohup bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX
 
 tail -f train-$MLP_ROLE_INDEX.log
 
-
+llama3_full_sft_ds
+mistral_full_sft_ds
 
 ### 单节点PT
 
