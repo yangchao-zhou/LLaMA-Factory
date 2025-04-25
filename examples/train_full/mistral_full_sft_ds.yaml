@@ -15,23 +15,23 @@ deepspeed: examples/deepspeed/ds_z3_config.json
 # dataset: hle_processed_data_gpt,hle_processed_data_qwen72B,hle_almost_all_correct
 # dataset: AIME_2024_processed_data_gpt,AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_gpt,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_gpt,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_gpt,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
 # dataset: AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
-dataset: LCB_true,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle
-
+dataset: LCB_true,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle,lima
+# ,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle
 
 # template: mistral_small_npc
 template: mistral_small
-cutoff_len: 8192
+cutoff_len: 16384
 max_samples: 1000000000000
 overwrite_cache: true
 preprocessing_num_workers: 120
 
 
 ### output
-output_dir: saves/full/mistral-24B-ins-sft_LCB-true_Math_20250421-5e-6
+output_dir: saves/full/mistral-24B-ins-sft_LCB_math_lima_20250425-5e-6
 logging_steps: 1
 # save_steps: 100
 save_strategy: epoch
-save_total_limit: 3
+save_total_limit: 6
 plot_loss: true
 # overwrite_output_dir: true
 
@@ -39,7 +39,7 @@ plot_loss: true
 per_device_train_batch_size: 1
 gradient_accumulation_steps: 1
 learning_rate: 5.0e-6
-num_train_epochs: 8.0
+num_train_epochs: 10.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.03
 # warmup_steps: 50

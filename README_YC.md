@@ -46,7 +46,10 @@ intro  和 greeting放在最后
       "messages": "conversations",
       "system": "system"
     }
-    
+
+## todo
+plan execution Reflection direct_answer
+
 ## 训练
 
 ### 火山分布式SFT
@@ -198,13 +201,13 @@ nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Facto
     --gpu-memory-utilization 0.45 \
     > vllm_logs/mistral-24B-ins-sft-LCB_Math_20250421_5e-6-8001.log 2>&1 &
 
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_LCB_20250419/checkpoint-285\
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6/checkpoint-610 \
     --task generate \
     --tensor-parallel-size 8 \
     --port 8001 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
-    > vllm_logs/vllm-Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_LCB_20250419.log 2>&1 &
+    > vllm_logs/vllm-Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6.log 2>&1 &
 
 nohup vllm serve saves/dpo/mitral-24b-ins-rl_AIME_gpqa-diamond_HLE_usamo_facebook_SWE_20250413/checkpoint-494\
     --task generate \

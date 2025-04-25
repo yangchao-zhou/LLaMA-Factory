@@ -8,8 +8,9 @@ finetuning_type: full
 # finetuning_type: freeze
 # freeze_trainable_layers: 20
 # freeze_trainable_modules: all
-deepspeed: examples/deepspeed/ds_z3_offload_config.json
+# deepspeed: examples/deepspeed/ds_z3_offload_config.json
 # deepspeed: examples/deepspeed/ds_z2_config.json
+deepspeed: examples/deepspeed/ds_z3_config.json
 
 ### dataset linky_score_20250221,
 # dataset: tulu_alpaca_percent5,deepseek_7_9_6875,role_play_combined_data_202500304_3,score_train_data_20250304,lima,generate_role_play_data_20250304_过采样_3
@@ -17,24 +18,24 @@ deepspeed: examples/deepspeed/ds_z3_offload_config.json
 # dataset: AIME_2024_processed_data_gpt,AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_gpt,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_gpt,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_gpt,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
 # dataset: AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
 # dataset: 
-dataset: LCB_true,LCB_false_can_use,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle
+dataset: LCB_true,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle,lima
 # dataset: LCB4Gemini
 
 template: llama3
-cutoff_len: 8192
+cutoff_len: 16384
 max_samples: 1000000000000
 overwrite_cache: true
 preprocessing_num_workers: 120
 
 
 ### output
-output_dir: saves/full/Llama-33-70b-ins-sft_LCB-2_Math_20250421-5e-6
+output_dir: saves/full/Llama-33-70b-ins-sft_LCB_Math_lima_20250425-5e-6
 # output_dir: saves/full/Llama-33-70b-ins-sft_LCB_20250420_Gemini
 # output_dir: saves/full/Llama-31-8b-ins-sft_facebook_part1w_20250416
 logging_steps: 1
 # save_steps: 100
 save_strategy: epoch
-save_total_limit: 3
+save_total_limit: 1
 plot_loss: true
 # overwrite_output_dir: true
 
