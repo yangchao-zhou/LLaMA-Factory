@@ -7,6 +7,13 @@
       "response": "output"
     }
   },
+  "Aider": {
+    "file_name": "/home/yangchao.zhou/projects/aider/tmp.benchmarks/SFT_data/sft_samples_true_20250507.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "response": "output"
+    }
+  },
   "LCB_true": {
     "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/LCB_processed-true.json",
     "columns": {

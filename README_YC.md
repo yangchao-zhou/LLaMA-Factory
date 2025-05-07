@@ -190,16 +190,18 @@ nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Facto
 
 pkill -f "llamafactory"
 pkill -f "vllm"
+pkill -f 'from multiprocessing.spawn import spawn_main'
+
 watch -n 1 gpustat
 
 
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/mistral-24B-ins-sft-LCB_Math_20250421_5e-6/checkpoint-488 \
+nohup vllm serve /maindata/data/shared/public/common_models/Llama-3.3-70B-Instruct \
     --task generate \
     --tensor-parallel-size 8 \
     --port 8000 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
-    > vllm_logs/mistral-24B-ins-sft-LCB_Math_20250421_5e-6-8001.log 2>&1 &
+    > vllm_logs/Llama-3.3-70B-Instruct.log 2>&1 &
 
 nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6/checkpoint-610 \
     --task generate \
@@ -209,13 +211,13 @@ nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Facto
     --gpu-memory-utilization 0.45 \
     > vllm_logs/vllm-Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6.log 2>&1 &
 
-nohup vllm serve saves/dpo/mitral-24b-ins-rl_AIME_gpqa-diamond_HLE_usamo_facebook_SWE_20250413/checkpoint-494\
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6 \
     --task generate \
     --tensor-parallel-size 8 \
     --port 8001 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
-    > vllm_logs/vllm-mitral-24b-ins-rl_AIME_gpqa-diamond_HLE_usamo_facebook_SWE_20250413-8004.log 2>&1 &
+    > vllm_logs/vllm-Llama-33-70b-ins-sft_LCB_Math.log 2>&1 &
 
 
 
