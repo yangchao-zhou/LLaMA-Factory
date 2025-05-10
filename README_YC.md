@@ -57,6 +57,7 @@ pkill -f "llamafactory"
 watch -n 1 gpustat
 
 pkill -f "llamafactory"
+pkill -f "test_gpu_mem"
 
 export  PYTHONPATH=`pwd`
 export  PYTHONPATH=/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
@@ -183,7 +184,7 @@ pkill -f "vllm"
 nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250406/checkpoint-450\
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8001 \
+    --port 3280 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.9 \
     > vllm_logs/vllm-Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250406.log 2>&1 &
@@ -198,26 +199,27 @@ watch -n 1 gpustat
 nohup vllm serve /maindata/data/shared/public/common_models/Llama-3.3-70B-Instruct \
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8000 \
+    --port 3280 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
+    --host 0.0.0.0 \
     > vllm_logs/Llama-3.3-70B-Instruct.log 2>&1 &
 
 nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6/checkpoint-610 \
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8001 \
+    --port 3280 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
     > vllm_logs/vllm-Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6.log 2>&1 &
 
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6 \
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider_20250510-5e-6-wocao \
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8001 \
+    --port 3280 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
-    > vllm_logs/vllm-Llama-33-70b-ins-sft_LCB_Math.log 2>&1 &
+    > vllm_logs/vllm-mistral-24B-ins-sft_aider_20250510-5e-6.log 2>&1 &
 
 
 
