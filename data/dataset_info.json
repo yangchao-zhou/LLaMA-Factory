@@ -7,10 +7,51 @@
       "response": "output"
     }
   },
-  "Aider": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/gpt-4.1-250414_sft_samples_true_20250510.jsonl",
+  "Aider-architect": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/merge_aider_multi_turns-architect-0517.json",
     "columns": {
+      "system": "system",
       "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "Aider-diff": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/merged-o3-diff-0518.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "Aider-diff-fenced": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/merged-o3-diff-fenced-0518.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "Aider-whole": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/merge_aider_multi_turns-whole-0517.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "LCB_v6": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/LCB-sft-v6.json",
+    "columns": {
+      "system": "system",
+      "prompt": "prompt",
       "response": "output"
     }
   },
