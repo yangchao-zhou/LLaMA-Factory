@@ -50,13 +50,26 @@ intro  和 greeting放在最后
 ## todo
 plan execution Reflection direct_answer
 
+# 测试
+
+curl -X POST https://0.0.0.0:3280/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "let_it_out",
+    "messages": [{"role": "user", "content": "请写一个 Python Hello World 示例"}],
+    "max_tokens": 50
+}'
+
 ## 训练
 
 ### 火山分布式SFT
 pkill -f "llamafactory"
 watch -n 1 gpustat
 
-pkill -f "vllm"
+pkill -f "llamafactory"
+pkill -f "test_gpu_mem"
+
+gpustat
 
 export DISABLE_VERSION_CHECK=1
 export  PYTHONPATH=`pwd`
@@ -71,7 +84,7 @@ conda activate nemo
 
 rm -rf train-$MLP_ROLE_INDEX.log
 
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX MASTER_ADDR=$MLP_WORKER_0_HOST MASTER_PORT=$MLP_WORKER_0_PORT  /root/miniconda3/envs/nemo/bin/llamafactory-cli train /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/examples/train_full/mistral_full_sft_ds.yaml' > train-$MLP_ROLE_INDEX.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX MASTER_ADDR=$MLP_WORKER_0_HOST MASTER_PORT=$MLP_WORKER_0_PORT  /root/miniconda3/envs/nemo/bin/llamafactory-cli train /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/examples/train_full/llama3_full_sft_ds.yaml' > train-$MLP_ROLE_INDEX.log 2>&1 &
 
 tail -f train-$MLP_ROLE_INDEX.log
 
@@ -184,7 +197,7 @@ pkill -f "vllm"
 nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider_20250509-5e-6\
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8001 \
+    --port 3280 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
     > vllm_logs/vllm-mistral-24B-ins-sft_aider_20250509-5e-6.log 2>&1 &
@@ -199,21 +212,43 @@ watch -n 1 gpustat
 nohup vllm serve /maindata/data/shared/public/common_models/Llama-3.3-70B-Instruct \
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8000 \
+    --port 3280 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
+    --host 0.0.0.0 \
     > vllm_logs/Llama-3.3-70B-Instruct.log 2>&1 &
 
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider_20250508-5e-6 \
+nohup vllm serve /maindata/data/shared/public/common_models/Mistral-Small-24B-Instruct-2501 \
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8000 \
+    --port 3280 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
-    > vllm_logs/vllm-mistral-24B-ins-sft_aider_20250508-5e-6.log 2>&1 &
+    > Mistral-Small-24B-Instruct-2501.log 2>&1 &
 
+curl -X POST 220.196.173.251:3280/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "let_it_out",
+    "messages": [{"role": "user", "content": "请写一个 Python Hello World 示例"}],
+    "max_tokens": 50
+}'
 
+nohup vllm serve saves/full_sft/mistral-24B-ins-sft_aider-whole-diff_20250519-1151-3e-6/checkpoint-200 \
+    --task generate \
+    --tensor-parallel-size 8 \
+    --port 3280 \
+    --served-model-name let_it_out \
+    --gpu-memory-utilization 0.9 \
+    > vllm_logs/vllm-mistral-24B-ins-sft_all_20250518-3e-6-nightly 2>&1 &
 
+curl -X POST 220.196.173.251:3280/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "let_it_out",
+    "messages": [{"role": "user", "content": "请写一个 Python Hello World 示例"}],
+    "max_tokens": 50
+}'
 
 
     

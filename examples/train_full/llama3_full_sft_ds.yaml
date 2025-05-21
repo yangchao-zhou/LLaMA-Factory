@@ -1,6 +1,6 @@
 ### model
 # model_name_or_path: /aisocial/shejiao/common_models/Llama-3.3-70B-Instruct
-model_name_or_path: /maindata/data/shared/public/common_models/Llama-3.3-70B-Instruct
+model_name_or_path: /aisocial-nlp/common_models/Llama-3.3-70B-Instruct
 ### method
 stage: sft
 do_train: true
@@ -8,9 +8,9 @@ finetuning_type: full
 # finetuning_type: freeze
 # freeze_trainable_layers: 20
 # freeze_trainable_modules: all
-# deepspeed: examples/deepspeed/ds_z3_offload_config.json
+deepspeed: examples/deepspeed/ds_z3_offload_config.json
 # deepspeed: examples/deepspeed/ds_z2_config.json
-deepspeed: examples/deepspeed/ds_z3_config.json
+# deepspeed: examples/deepspeed/ds_z3_config.json
 
 ### dataset linky_score_20250221,
 # dataset: tulu_alpaca_percent5,deepseek_7_9_6875,role_play_combined_data_202500304_3,score_train_data_20250304,lima,generate_role_play_data_20250304_过采样_3
@@ -18,8 +18,8 @@ deepspeed: examples/deepspeed/ds_z3_config.json
 # dataset: AIME_2024_processed_data_gpt,AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_gpt,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_gpt,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_gpt,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
 # dataset: AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
 # dataset: 
-dataset: LCB_true,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle,lima
-# dataset: LCB4Gemini
+# dataset: LCB_true,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle,lima
+dataset: Aider-diff
 
 template: llama3
 cutoff_len: 16384
@@ -29,13 +29,13 @@ preprocessing_num_workers: 120
 
 
 ### output
-output_dir: saves/full/Llama-33-70b-ins-sft_LCB_Math_lima_20250425-5e-6
+output_dir: /aisocial-nlp/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/Llama-33-70b-ins-sft_Aider_20250512-5e-6
 # output_dir: saves/full/Llama-33-70b-ins-sft_LCB_20250420_Gemini
 # output_dir: saves/full/Llama-31-8b-ins-sft_facebook_part1w_20250416
 logging_steps: 1
-# save_steps: 100
-save_strategy: epoch
-save_total_limit: 1
+save_steps: 1000
+# save_strategy: epoch
+save_total_limit: 2
 plot_loss: true
 # overwrite_output_dir: true
 
@@ -50,6 +50,8 @@ warmup_ratio: 0.03
 bf16: true
 ddp_timeout: 180000000
 flash_attn: fa2
+save_only_model: true
+mask_history: true
 # resume_from_checkpoint: true
 
 ### eval
