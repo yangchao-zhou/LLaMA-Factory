@@ -7,15 +7,15 @@ finetuning_type: full
 # finetuning_type: freeze
 # freeze_trainable_layers: 20
 # freeze_trainable_modules: all
-deepspeed: examples/deepspeed/ds_z3_offload_config.json
-# deepspeed: examples/deepspeed/ds_z3_config.json
+# deepspeed: examples/deepspeed/ds_z3_offload_config.json
+deepspeed: examples/deepspeed/ds_z3_config.json
 # deepspeed: examples/deepspeed/ds_z2_config.json
 
 ### dataset linky_score_20250221,
 # dataset: hle_processed_data_gpt,hle_processed_data_qwen72B,hle_almost_all_correct
 # dataset: AIME_2024_processed_data_gpt,AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_gpt,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_gpt,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_gpt,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
 # dataset: AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
-dataset: Aider
+dataset: Aider,LCB_true,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle,lima
 #  LCB_true,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle,lima
 
 # template: mistral_small_npc
@@ -27,11 +27,12 @@ preprocessing_num_workers: 120
 
 
 ### output
-output_dir: /nas/sft_models/full_sft/mistral-24B-ins-sft_aider_20250507-5e-6
+# output_dir: /nas/sft_models/full_sft/mistral-24B-ins-sft_aider_20250508-5e-6
+output_dir: saves/full_sft/mistral-24B-ins-sft_aider_20250509-5e-6
 logging_steps: 1
-# save_steps: 100
+# save_steps: 1000
 save_strategy: epoch
-save_total_limit: 6
+save_total_limit: 2
 plot_loss: true
 # overwrite_output_dir: true
 

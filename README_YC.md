@@ -56,8 +56,9 @@ plan execution Reflection direct_answer
 pkill -f "llamafactory"
 watch -n 1 gpustat
 
-pkill -f "llamafactory"
+pkill -f "vllm"
 
+export DISABLE_VERSION_CHECK=1
 export  PYTHONPATH=`pwd`
 export  PYTHONPATH=/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory
 export  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8
@@ -180,13 +181,13 @@ export  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8
 export TMPDIR=/maindata/data/shared/public/yangchao.zhou/projects/tmp
 export NCCL_SOCKET_IFNAME=eth1
 pkill -f "vllm"
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250406/checkpoint-450\
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider_20250509-5e-6\
     --task generate \
     --tensor-parallel-size 8 \
     --port 8001 \
     --served-model-name let_it_out \
-    --gpu-memory-utilization 0.9 \
-    > vllm_logs/vllm-Llama-33-70b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250406.log 2>&1 &
+    --gpu-memory-utilization 0.45 \
+    > vllm_logs/vllm-mistral-24B-ins-sft_aider_20250509-5e-6.log 2>&1 &
 
 pkill -f "llamafactory"
 pkill -f "vllm"
@@ -203,21 +204,15 @@ nohup vllm serve /maindata/data/shared/public/common_models/Llama-3.3-70B-Instru
     --gpu-memory-utilization 0.45 \
     > vllm_logs/Llama-3.3-70B-Instruct.log 2>&1 &
 
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6/checkpoint-610 \
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider_20250508-5e-6 \
     --task generate \
     --tensor-parallel-size 8 \
-    --port 8001 \
+    --port 8000 \
     --served-model-name let_it_out \
     --gpu-memory-utilization 0.45 \
-    > vllm_logs/vllm-Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6.log 2>&1 &
+    > vllm_logs/vllm-mistral-24B-ins-sft_aider_20250508-5e-6.log 2>&1 &
 
-nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full/Llama-33-70b-ins-sft_LCB_Math_20250423-5e-6 \
-    --task generate \
-    --tensor-parallel-size 8 \
-    --port 8001 \
-    --served-model-name let_it_out \
-    --gpu-memory-utilization 0.45 \
-    > vllm_logs/vllm-Llama-33-70b-ins-sft_LCB_Math.log 2>&1 &
+
 
 
 
