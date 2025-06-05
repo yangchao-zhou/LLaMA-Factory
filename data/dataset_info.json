@@ -1,10 +1,115 @@
 {
-  "generate_role_play_data_20250304_过采样_3": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/role_play/角色扮演生产数据/角色扮演生产数据/20250310/train/combined_data_20250304_过采样_3.bin",
+  "role_play": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/combined_data_20250519_role_play_3.json",
     "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "code-foreces": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/CODEFORCES_0519_cpp_SFT.json",
+    "columns": {
+      "system": "system",
       "prompt": "instruction",
       "query": "input",
       "response": "output"
+    }
+  },
+  "HLE_0515_SFT": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/HLE_0515_SFT.json",
+    "columns": {
+      "system": "system",
+      "prompt": "prompt",
+      "response": "output"
+    }
+  },
+  "GPQA_0515_SFT": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/GPQA_0515_SFT.json",
+    "columns": {
+      "system": "system",
+      "prompt": "prompt",
+      "response": "output"
+    }
+  },
+  "AIME_OLD_0516_SFT": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/AIME_OLD_0516_SFT.json",
+    "columns": {
+      "system": "system",
+      "prompt": "prompt",
+      "response": "output"
+    }
+  },
+  "aider_summary_log-41-part": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/data/open_source/summary_log-41-part-1.jsonl",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "aider_whole_0": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/data/open_source/aider_whole-0603-for_0-o3_41.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "aider_whole_1": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/data/open_source/aider_whole-0603-for_1-o3_41.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "aider_whole-0527-gpt-for_0-del_part": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/aider_whole-0527-gpt-for_0-del_part-v5.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "aider_diff-0527-gpt-for_0-del_part": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/aider_diff-0527-gpt-for_0-del_part-v5.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "Aider-his": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/data/open_source/translated-train-his.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
+  },
+  "Aider": {
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/data/open_source/translated-train.json",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
     }
   },
   "Aider-architect": {
@@ -18,7 +123,7 @@
     }
   },
   "Aider-diff": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/merged-o3-diff-0518.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/aider_diff-0527-v4-only1.json",
     "columns": {
       "system": "system",
       "prompt": "instruction",
@@ -38,7 +143,7 @@
     }
   },
   "Aider-whole": {
-    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/merge_aider_multi_turns-whole-0517.json",
+    "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/aider_whole-0527-v4-only1.json",
     "columns": {
       "system": "system",
       "prompt": "instruction",
@@ -583,7 +688,7 @@
       }
     },
     "lima": {
-      "file_name": "/maindata/data/shared/public/yangchao.zhou/data/llamafactory/lima/lima.json",
+      "file_name": "/maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/lima.json",
       "formatting": "sharegpt"
     },
     "guanaco": {
