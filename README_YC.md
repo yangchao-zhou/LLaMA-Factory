@@ -225,10 +225,10 @@ nohup vllm serve /aisocial-nlp/common_models/Llama-3.3-70B-Instruct \
     --host 0.0.0.0 \
     > vllm_logs/Llama-3.3-70B-Instruct.log 2>&1 &
 
-nohup vllm serve /aisocial-nlp/common_models/Mistral-Small-24B-Instruct-2501 \
+nohup vllm serve /maindata/data/shared/public/yangchao.zhou/models/mistralai/Mistral-Small-24B-Instruct-2501 \
     --task generate \
     --tensor-parallel-size 8 \
-    --port 3280 \
+    --port 3286 \
     --served-model-name mistral \
     --gpu-memory-utilization 0.45 \
     > Mistral-Small-24B-Instruct-2501-8001.log 2>&1 &
@@ -289,44 +289,73 @@ python3 -m sglang.launch_server \
   --mem-fraction-static 0.83 \
   --trust-remote-code
 
+
+conda activate sg
 nohup python3 -m sglang.launch_server \
-  --model-path /aisocial-nlp/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider-gpt-0527-lr3e6-v7/checkpoint-140 \
-  --served-model-name let_it_out \
+  --model-path /maindata/data/shared/public/wanpenghan/LLaMA-Factory/saves/full/mistral-24B-ins-sft_ML_6w_0609_lr3e6/checkpoint-21070 \
+  --served-model-name ML-ep13 \
   --host 0.0.0.0 \
   --port 3280 \
-  --chat-template /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/md-link.jinja \
+  --chat-template /maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/chat_template_plan.jinja \
   --tp 8 \
   --context-length 32768 \
   --max-prefill-tokens 100000 \
   --max-running-requests 300 \
   --mem-fraction-static 0.83 \
-  --trust-remote-code > output.log 2>&1 &
+  --trust-remote-code > output-ML-ep14.log 2>&1 &
 
 
-
-curl -X POST 192.168.0.11:3286/v1/chat/completions \
+### /v1/chat/completions
+curl -X POST 192.168.0.11:3280/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "let_it_out",
+    "model": "ML-ep13",
     "messages": [{"role": "system", "content": "你是个AI助手"},
-      {"role": "user", "content": "请写一个 Python Hello World 示例"},
-      {"role": "system", "content": "你是个超级强大的AI助手"}
+      {"role": "user", "content": "请写一个 Python Hello World 示例"}
     ],
     "max_tokens": 1000
 }'
 
-curl -X POST 220.196.173.251:3281/v1/chat/completions \
+curl -X POST host.docker.internal:3280/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "let_it_out",
     "messages": [{"role": "system", "content": "你是个AI助手"},
-      {"role": "user", "content": "请写一个 Python Hello World 示例"},
-      {"role": "system", "content": "你是个超级强大的AI助手"}
+      {"role": "user", "content": "请写一个 Python Hello World 示例"}
     ],
     "max_tokens": 1000
 }'
 
+curl -X POST https://sd0kkieqcirbt02vttd60.apigateway-cn-beijing.volceapi.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer 5d18423d-d119-489c-a780-8a76924228d2" \
+  -d '{
+    "model": "ML-ep13",
+    "messages": [{"role": "system", "content": "你是个AI助手"},
+      {"role": "user", "content": "Let $k$ and $d$ be positive integers. Prove that there exists a positive integer $N$ such that for every odd integer $n>N$, the digits in the base-$2n$ representation of $n^k$ are all greater than $d$."}
+    ],
+    "max_tokens": 1000
+}'
 
+### /v1/ompletions
+
+curl -X POST 192.168.0.11:3280/v1/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "ML-ep13",
+    "prompt": '''正确的解答以下问题\n问题：Yarik is a big fan of many kinds of music. But Yarik loves not only listening to music but also writing it. He likes electronic music most of all, so he has created his own system of music notes, which, in his opinion, is best for it.\n\nSince Yarik also likes informatics, n\n方法：我们需要制定一个合理的 计划（plan），并按照该计划 逐步执行（execute）多步推理（multi-step trajectory），确保最终得出正确的答案。如果你发现自己的规划或者推理有问题，可以随时回溯修正过往的计划和多步推理。\n\n任务：请帮助生成完整的计划，并详细展开执行过程，以确保逻辑清晰、结果准确。请务必保证真实，不要胡编乱造。\n\n生成的plan，请用### Plan:的格式开头\n生成的推理步骤，请用### Execution:的格式开头\n最后的结果请用### Direct Answer:的格式开头.\n### Direct Answer: ''',
+    "max_tokens": 1000
+}'
+
+请求线上
+curl -X POST https://sd0kkieqcirbt02vttd60.apigateway-cn-beijing.volceapi.com/v1/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer 5d18423d-d119-489c-a780-8a76924228d2" \
+  -d '{
+    "model": "ML-ep13",
+    "prompt": "我爱你，但是我不能和你在一起",
+    "max_tokens": 1000
+}'
     
 ## eval
 
@@ -358,4 +387,12 @@ sudoserviceatdstart
 sudoserviceatdstatus
 
 echo "nohup /maindata/data/shared/public/yangchao.zhou/anaconda3/envs/mistral/bin/python /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/tests/test_gpu_mem.py > test_gpu_mem.log 2>&1 &" | at now + 1 hour
-```
+
+
+## Open webui 启动
+ 
+cd /maindata/data/shared/public/wanpenghan/app/open-webui
+conda deactivate
+conda deactivate
+conda activate open-webui
+bash run_webui.sh
