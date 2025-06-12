@@ -63,9 +63,12 @@ curl -X POST https://0.0.0.0:3280/v1/chat/completions \
 ## 训练
 
 ### 火山分布式SFT
+```bash
+
 pkill -f "llamafactory"
 watch -n 1 gpustat
 
+export WANDB_MODE=disabled
 pkill -f "llamafactory"
 pkill -f "test_gpu_mem"
 
@@ -91,6 +94,7 @@ tail -f train-$MLP_ROLE_INDEX.log
 
 llama3_full_sft_ds
 mistral_full_sft_ds
+```
 
 ### 单节点PT
 
@@ -109,15 +113,18 @@ pip install -e ".[torch,metrics]"
 pip install deepspeed==0.14.5
 pip install flash-attn==2.6.2
 pip install lmdeploy
-export  PYTHONPATH=`pwd`
 
+export PYTHONPATH=`pwd`
+export WANDB_MODE=disabled
 export TMPDIR=/maindata/data/shared/public/yangchao.zhou/projects/tmp
 
 conda activate nemo
-export CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7
+export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml
 
-nohup llamafactory-cli train examples/train_full/mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo.yaml > train_output-mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo.log 2>&1 &
+nohup llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml > train_output-mistral_full_sft_ds-8001.log 2>&1 &
+
+nohup llamafactory-cli train examples/train_full/mistral_full_sft_ds-test.yaml > train_output-mistral_full_sft_ds-8002.log 2>&1 &
 
 nohup llamafactory-cli train examples/train_full/mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo_SWE-bench_Verified.yaml > train_output-mistral-24B-ins-sft-AIME_gpqa-diamond_HLE_usamo_SWE-bench_Verified.log 2>&1 &
 
@@ -155,9 +162,8 @@ export NCCL_SOCKET_IFNAME=eth1
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 # FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml
 
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=0 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-0.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=1 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-1.log 2>&1 &
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=3 NODE_RANK=2 MASTER_ADDR=10.1.16.59 MASTER_PORT=29500 llamafactory-cli train examples/train_full/qwen_full_sft_ds.yaml' > train-2.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=2 NODE_RANK=0 MASTER_ADDR=10.1.16.83 MASTER_PORT=29500 llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml' > train-0.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=2 NODE_RANK=1 MASTER_ADDR=10.1.16.83 MASTER_PORT=29500 llamafactory-cli train examples/train_full/mistral_full_sft_ds.yaml' > train-1.log 2>&1 &
 
 
 bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX MASTER_ADDR=$MLP_WORKER_0_HOST MASTER_PORT=$MLP_WORKER_0_PORT  /root/miniconda3/envs/nemo/bin/llamafactory-cli train /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/examples/train_full/llama3_full_sft_ds.yaml' 
@@ -192,7 +198,7 @@ nohup bash -c 'FORCE_TORCHRUN=1 NNODES=4 NODE_RANK=3 MASTER_ADDR=10.1.16.59 MAST
 
 export  PYTHONPATH=`pwd`
 export  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8
-export TMPDIR=/maindata/data/shared/public/yangchao.zhou/projects/tmp
+export TMPDIR=/aisocial-nlp/yangchao.zhou/projects/tmp
 export NCCL_SOCKET_IFNAME=eth1
 pkill -f "vllm"
 nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider_20250509-5e-6\
@@ -210,7 +216,7 @@ pkill -f 'sglang.launch_server'
 watch -n 1 gpustat
 
 
-nohup vllm serve /maindata/data/shared/public/common_models/Llama-3.3-70B-Instruct \
+nohup vllm serve /aisocial-nlp/common_models/Llama-3.3-70B-Instruct \
     --task generate \
     --tensor-parallel-size 8 \
     --port 3280 \
@@ -219,13 +225,13 @@ nohup vllm serve /maindata/data/shared/public/common_models/Llama-3.3-70B-Instru
     --host 0.0.0.0 \
     > vllm_logs/Llama-3.3-70B-Instruct.log 2>&1 &
 
-nohup vllm serve /maindata/data/shared/public/common_models/Mistral-Small-24B-Instruct-2501 \
+nohup vllm serve /aisocial-nlp/common_models/Mistral-Small-24B-Instruct-2501 \
     --task generate \
     --tensor-parallel-size 8 \
     --port 3280 \
-    --served-model-name let_it_out \
+    --served-model-name mistral \
     --gpu-memory-utilization 0.45 \
-    > Mistral-Small-24B-Instruct-2501.log 2>&1 &
+    > Mistral-Small-24B-Instruct-2501-8001.log 2>&1 &
 
 curl -X POST 220.196.173.251:3280/v1/chat/completions \
   -H "Content-Type: application/json" \
@@ -235,38 +241,89 @@ curl -X POST 220.196.173.251:3280/v1/chat/completions \
     "max_tokens": 50
 }'
 
-nohup vllm serve saves/full_sft/mistral-24B-ins-sft_aider-whole-diff_20250519-1151-3e-6/checkpoint-200 \
+pkill -f "llamafactory"
+pkill -f "vllm"
+pkill -f 'from multiprocessing.spawn import spawn_main'
+pkill -f 'sglang'
+
+gpustat
+
+nohup vllm serve /aisocial-nlp/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider-0529-3e-6-part-history-mask_history \
+    --task generate \
+    --tensor-parallel-size 8 \
+    --port 3281 \
+    --served-model-name let_it_out \
+    --gpu-memory-utilization 0.4 \
+    --max-model-len 32768 \
+    > vllm_logs/vllm-mistral-24B-ins-sft_aider-0529-3e-6-part-history-mask_history.log 2>&1 &
+
+nohup vllm serve /aisocial-nlp/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider-summary-0605-8001 \
     --task generate \
     --tensor-parallel-size 8 \
     --port 3280 \
     --served-model-name let_it_out \
-    --gpu-memory-utilization 0.9 \
-    > vllm_logs/vllm-mistral-24B-ins-sft_all_20250518-3e-6-nightly 2>&1 &
+    --gpu-memory-utilization 0.4 \
+    --max-model-len 32768 \
+    > vllm_logs/vllm-mistral-24B-ins-sft_aider-0603-ep13-8001.log 2>&1 &
+
+nohup vllm serve /aisocial-nlp/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider-summary-0605-8002-lima/ \
+    --task generate \
+    --tensor-parallel-size 8 \
+    --port 3280 \
+    --served-model-name let_it_out \
+    --gpu-memory-utilization 0.4 \
+    --max-model-len 32768 \
+    > vllm_logs/vllm-mistral-24B-ins-sft_aider-0603-ep15-8002.log 2>&1 &
+
+
+python3 -m sglang.launch_server \
+  --model-path /aisocial-nlp/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider-gpt-0527-lr3e6-v8-reminder-multi/checkpoint-56 \
+  --served-model-name let_it_out \
+  --host 0.0.0.0 \
+  --port 3280 \
+  --chat-template /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/md-link.jinja \
+  --tp 8 \
+  --context-length 32768 \
+  --max-prefill-tokens 100000 \
+  --max-running-requests 300 \
+  --mem-fraction-static 0.83 \
+  --trust-remote-code
+
+nohup python3 -m sglang.launch_server \
+  --model-path /aisocial-nlp/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider-gpt-0527-lr3e6-v7/checkpoint-140 \
+  --served-model-name let_it_out \
+  --host 0.0.0.0 \
+  --port 3280 \
+  --chat-template /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/md-link.jinja \
+  --tp 8 \
+  --context-length 32768 \
+  --max-prefill-tokens 100000 \
+  --max-running-requests 300 \
+  --mem-fraction-static 0.83 \
+  --trust-remote-code > output.log 2>&1 &
 
 
 
 curl -X POST 192.168.0.11:3286/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "mistral-24B-ins-sft_ML_6w_0609_lr3e6_checkpoint-18060",
-    "messages": [{"role": "user", "content": "请写一个 Python Hello World 示例"}],
-    "max_tokens": 50
+    "model": "let_it_out",
+    "messages": [{"role": "system", "content": "你是个AI助手"},
+      {"role": "user", "content": "请写一个 Python Hello World 示例"},
+      {"role": "system", "content": "你是个超级强大的AI助手"}
+    ],
+    "max_tokens": 1000
 }'
 
-curl -X POST 115.190.89.64:3286/v1/chat/completions \
+curl -X POST 220.196.173.251:3281/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Qwen3-32B-ins-sft_ML_ALL_0606_lr5e6_checkpoint-8340",
-    "messages": [{"role": "user", "content": "请写一个 Python Hello World 示例"}],
-    "max_tokens": 50
-}'
-
-curl -X POST host.docker.internal:3286/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "mistral-24B-ins-sft_ML_6w_0609_lr3e6_checkpoint-18060",
-    "messages": [{"role": "user", "content": "请写一个 Python Hello World 示例"}],
-    "max_tokens": 50
+    "model": "let_it_out",
+    "messages": [{"role": "system", "content": "你是个AI助手"},
+      {"role": "user", "content": "请写一个 Python Hello World 示例"},
+      {"role": "system", "content": "你是个超级强大的AI助手"}
+    ],
+    "max_tokens": 1000
 }'
 
 
@@ -280,7 +337,7 @@ python src/eval_es_tmp-200.py
 conda activate nemo
 export CUDA_VISIBLE_DEVICES=0
 
-
+checkpoint-490
 
 ## gpu
 
