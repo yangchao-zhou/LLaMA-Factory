@@ -49,7 +49,7 @@ class SupervisedDatasetProcessor(DatasetProcessor):
         total_length = len(input_ids) + (1 if self.template.efficient_eos else 0)
         if self.data_args.mask_history:
             encoded_pairs = encoded_pairs[::-1]  # high priority for last turns
-        if "Act as an expert software developer." in system:
+        if "Act as an expert software developer.\nTake requests for changes to the supplied code.\nIf the request is ambiguous, ask questions.\n\nAlways reply to the user in the same language they are using." in system:
             # aider 数据集特殊处理
             encoded_pairs = encoded_pairs[::-1]
             logger.warning_rank0("mask_history of 'Act as an expert software developer.' in system")
@@ -74,7 +74,7 @@ class SupervisedDatasetProcessor(DatasetProcessor):
 
             if self.data_args.mask_history and turn_idx != 0:  # train on the last turn only
                 target_label = [IGNORE_INDEX] * target_len
-            elif "Act as an expert software developer." in system and turn_idx != 0:
+            elif "Act as an expert software developer.\nTake requests for changes to the supplied code.\nIf the request is ambiguous, ask questions.\n\nAlways reply to the user in the same language they are using." in system and turn_idx != 0:
                 # aider 数据集特殊处理
                 target_label = [IGNORE_INDEX] * target_len
             else:
@@ -83,7 +83,7 @@ class SupervisedDatasetProcessor(DatasetProcessor):
             if self.data_args.mask_history:  # reversed sequences
                 input_ids = source_ids + target_ids + input_ids
                 labels = source_label + target_label + labels
-            elif "Act as an expert software developer." in system:
+            elif "Act as an expert software developer.\nTake requests for changes to the supplied code.\nIf the request is ambiguous, ask questions.\n\nAlways reply to the user in the same language they are using." in system:
                 # aider 数据集特殊处理
                 input_ids = source_ids + target_ids + input_ids
                 labels = source_label + target_label + labels

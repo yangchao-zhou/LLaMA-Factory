@@ -70,6 +70,7 @@ pkill -f "llamafactory"
 pkill -f "test_gpu_mem"
 
 gpustat
+export DISABLE_WANDB=true
 
 export DISABLE_VERSION_CHECK=1
 export  PYTHONPATH=`pwd`
@@ -84,7 +85,7 @@ conda activate nemo
 
 rm -rf train-$MLP_ROLE_INDEX.log
 
-nohup bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX MASTER_ADDR=$MLP_WORKER_0_HOST MASTER_PORT=$MLP_WORKER_0_PORT  /root/miniconda3/envs/nemo/bin/llamafactory-cli train /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/examples/train_full/llama3_full_sft_ds.yaml' > train-$MLP_ROLE_INDEX.log 2>&1 &
+nohup bash -c 'FORCE_TORCHRUN=1 NNODES=$MLP_WORKER_NUM NODE_RANK=$MLP_ROLE_INDEX MASTER_ADDR=$MLP_WORKER_0_HOST MASTER_PORT=$MLP_WORKER_0_PORT  /root/miniconda3/envs/nemo/bin/llamafactory-cli train /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/examples/train_full/mistral_full_sft_ds.yaml' > train-$MLP_ROLE_INDEX.log 2>&1 &
 
 tail -f train-$MLP_ROLE_INDEX.log
 
@@ -205,7 +206,7 @@ nohup vllm serve /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Facto
 pkill -f "llamafactory"
 pkill -f "vllm"
 pkill -f 'from multiprocessing.spawn import spawn_main'
-
+pkill -f 'sglang.launch_server'
 watch -n 1 gpustat
 
 
@@ -242,10 +243,28 @@ nohup vllm serve saves/full_sft/mistral-24B-ins-sft_aider-whole-diff_20250519-11
     --gpu-memory-utilization 0.9 \
     > vllm_logs/vllm-mistral-24B-ins-sft_all_20250518-3e-6-nightly 2>&1 &
 
-curl -X POST 220.196.173.251:3280/v1/chat/completions \
+
+
+curl -X POST 192.168.0.11:3286/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "let_it_out",
+    "model": "mistral-24B-ins-sft_ML_6w_0609_lr3e6_checkpoint-18060",
+    "messages": [{"role": "user", "content": "请写一个 Python Hello World 示例"}],
+    "max_tokens": 50
+}'
+
+curl -X POST 115.190.89.64:3286/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "Qwen3-32B-ins-sft_ML_ALL_0606_lr5e6_checkpoint-8340",
+    "messages": [{"role": "user", "content": "请写一个 Python Hello World 示例"}],
+    "max_tokens": 50
+}'
+
+curl -X POST host.docker.internal:3286/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "mistral-24B-ins-sft_ML_6w_0609_lr3e6_checkpoint-18060",
     "messages": [{"role": "user", "content": "请写一个 Python Hello World 示例"}],
     "max_tokens": 50
 }'
