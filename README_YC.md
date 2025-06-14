@@ -293,7 +293,7 @@ python3 -m sglang.launch_server \
 conda activate sg
 nohup python3 -m sglang.launch_server \
   --model-path /maindata/data/shared/public/wanpenghan/LLaMA-Factory/saves/full/mistral-24B-ins-sft_ML_6w_0609_lr3e6/checkpoint-21070 \
-  --served-model-name ML-ep13 \
+  --served-model-name MindLink_Beta \
   --host 0.0.0.0 \
   --port 3280 \
   --chat-template /maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/chat_template_plan.jinja \
@@ -309,7 +309,7 @@ nohup python3 -m sglang.launch_server \
 export PYTHON_LOGGING_LEVEL=DEBUG
 python3 -m sglang.launch_server \
   --model-path /maindata/data/shared/public/wanpenghan/LLaMA-Factory/saves/full/mistral-24B-ins-sft_ML_6w_0609_lr3e6/checkpoint-21070 \
-  --served-model-name ML-ep13 \
+  --served-model-name MindLink_Beta \
   --host 0.0.0.0 \
   --port 3280 \
   --chat-template /maindata/data/shared/public/yangchao.zhou/projects/mistral_pro/data/instruction/open_source/best/chat_template_plan.jinja \
@@ -348,7 +348,7 @@ curl -X POST https://sd0kkieqcirbt02vttd60.apigateway-cn-beijing.volceapi.com/v1
   -H "Authorization: Bearer 5d18423d-d119-489c-a780-8a76924228d2" \
   -d @- <<EOF
 {
-  "model": "ML-ep13",
+  "model": "MindLink_Beta",
   "messages": [
     {
       "role": "user",
@@ -365,7 +365,7 @@ curl -X POST https://sd0kkieqcirbt02vttd60.apigateway-cn-beijing.volceapi.com/v1
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer 5d18423d-d119-489c-a780-8a76924228d2" \
   -d '{
-    "model": "ML-ep13",
+    "model": "MindLink_Beta",
     "messages": [
       {"role": "user", "content": "Let $k$ and $d$ be positive integers. Prove that there exists a positive integer $N$ such that for every odd integer $n>N$, the digits in the base-$2n$ representation of $n^k$ are all greater than $d$."}
     ],
@@ -380,7 +380,7 @@ curl -X POST localhost:8000 \
   -H "Authorization: Bearer 5d18423d-d119-489c-a780-8a76924228d2" \
   -d @- <<EOF
   {
-    "model": "ML-ep13",
+    "model": "MindLink_Beta",
     "messages": [
       {
         "role": "user",
@@ -398,7 +398,7 @@ curl -X POST localhost:8000 \
 curl -X POST 192.168.0.11:3280/v1/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "ML-ep13",
+    "model": "MindLink_Beta",
     "prompt": '''正确的解答以下问题\n问题：Yarik is a big fan of many kinds of music. But Yarik loves not only listening to music but also writing it. He likes electronic music most of all, so he has created his own system of music notes, which, in his opinion, is best for it.\n\nSince Yarik also likes informatics, n\n方法：我们需要制定一个合理的 计划（plan），并按照该计划 逐步执行（execute）多步推理（multi-step trajectory），确保最终得出正确的答案。如果你发现自己的规划或者推理有问题，可以随时回溯修正过往的计划和多步推理。\n\n任务：请帮助生成完整的计划，并详细展开执行过程，以确保逻辑清晰、结果准确。请务必保证真实，不要胡编乱造。\n\n生成的plan，请用### Plan:的格式开头\n生成的推理步骤，请用### Execution:的格式开头\n最后的结果请用### Direct Answer:的格式开头.\n### Direct Answer: ''',
     "max_tokens": 1000
 }'
@@ -409,7 +409,7 @@ curl -X POST https://sd15vu0fhj5i8uvr669og.apigateway-cn-beijing.volceapi.com/v1
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer 5d18423d-d119-489c-a780-8a76924228d2" \
   -d '{
-    "model": "ML-ep13",
+    "model": "MindLink_Beta",
     "messages": [
       {
         "role": "user",
