@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse, Response
+from fastapi.middleware.cors import CORSMiddleware
 import httpx
 import json
 import asyncio
@@ -104,6 +105,15 @@ async def lifespan(app: FastAPI):
 
 # 创建 FastAPI 应用，使用 lifespan 管理器
 app = FastAPI(lifespan=lifespan)
+
+# 添加 CORS 中间件
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 允许所有源，生产环境建议指定具体域名
+    allow_credentials=True,
+    allow_methods=["*"],  # 允许所有 HTTP 方法
+    allow_headers=["*"],  # 允许所有请求头
+)
 
 async def process_stream(response: httpx.Response, endpoint=None, request_id=None) -> AsyncGenerator[bytes, None]:
     """处理流式响应，收集完整内容后检查 ### Direct Answer:\n 标记"""
@@ -532,7 +542,7 @@ async def proxy_completions(request: Request):
         return await proxy_direct_request(new_request, "/v1/completions")
 
 # 通用路由：直接透传其他接口
-@app.api_route("/{path:path}", methods=["GET", "POST", "HEAD"])
+@app.api_route("/{path:path}", methods=["GET", "POST", "HEAD", "OPTIONS"])
 async def catch_all(request: Request, path: str):
     return await proxy_direct_request(request, f"/{path}")
 

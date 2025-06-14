@@ -370,7 +370,7 @@ curl -X POST https://sd0kkieqcirbt02vttd60.apigateway-cn-beijing.volceapi.com/v1
       {"role": "user", "content": "Let $k$ and $d$ be positive integers. Prove that there exists a positive integer $N$ such that for every odd integer $n>N$, the digits in the base-$2n$ representation of $n^k$ are all greater than $d$."}
     ],
     "max_tokens": 2000,
-    "stream": True
+    "stream": true
 }'
 
 #### 请求代理
@@ -388,7 +388,7 @@ curl -X POST localhost:8000 \
       }
     ],
     "max_tokens": 2000,
-    "stream": True
+    "stream": true
   }
   EOF
 
