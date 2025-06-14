@@ -8,6 +8,8 @@
 
 cp /maindata/data/shared/public/yangchao.zhou/projects/LLaMA-Factory/del_paln/vlm_ser_claude.py /maindata/data/shared/public/online/server
 
+
+
 ## 启动sglang 服务
 
 ### mistral
@@ -53,12 +55,16 @@ curl -X POST https://sd15vu0fhj5i8uvr669og.apigateway-cn-beijing.volceapi.com/v1
     "model": "MindLink_Beta",
     "messages": [
       {
+        "role": "system",
+        "content": "你是个AI助手"
+      },
+      {
         "role": "user",
         "content": "你好，这个接口能正常工作吗？"
       }
     ],
     "max_tokens": 1000,
-    "stream": true
+    "stream": false
 }'
 
 ### 请求LLM

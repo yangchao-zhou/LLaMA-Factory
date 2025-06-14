@@ -69,23 +69,17 @@ class AsyncLogger:
             async with aiofiles.open(self.log_file, 'a', encoding='utf-8') as f:  # type: ignore
                 await f.write(json.dumps(log_entry, ensure_ascii=False) + '\n')
             
-            # 记录到标准日志（只记录一次）
-            logger_std.info(f"Chat Log - Request: {log_entry.get('request_id', 'unknown')[:8]}, "
+            logger_std.info(f"Chat Log - Request: {log_entry.get('request_id', 'unknown')}, "
                            f"Endpoint: {log_entry.get('endpoint', 'unknown')}, "
                            f"Streaming: {log_entry.get('is_streaming', 'unknown')}, "
-                           f"user_input: {log_entry.get('user_input', '')[:50]}{'...' if len(log_entry.get('user_input', '')) > 50 else ''}, "
-                           f"ai_response: {log_entry.get('ai_response', '')[:50]}{'...' if len(log_entry.get('ai_response', '')) > 50 else ''}")
-            
-            # 如果有 system 消息，也单独记录
-            if 'system_messages' in log_entry and log_entry['system_messages']:
-                logger_std.info(f"System Messages - Request: {log_entry.get('request_id', 'unknown')[:8]}, "
-                               f"Count: {len(log_entry['system_messages'])}, "
-                               f"Content: {str(log_entry['system_messages'])[:100]}{'...' if len(str(log_entry['system_messages'])) > 100 else ''}")
+                           f"User: {log_entry.get('user_input', '')}, "
+                           f"AI: {log_entry.get('ai_response', '')}, "
+                           f"Original AI: {log_entry.get('ori_ai_response', '')}")
                 
         except Exception as e:
             logger_std.error(f"写入日志文件错误: {e}")
     
-    async def log_interaction(self, request_id: str, user_input: str, ai_response: str, endpoint: str, messages=None, prompt=None, is_streaming=None):
+    async def log_interaction(self, request_id: str, user_input: str, ai_response: str, endpoint: str, messages=None, prompt=None, is_streaming=None, ori_ai_response=None):
         """记录用户交互"""
         log_entry = {
             "timestamp": datetime.now().isoformat(),
@@ -96,6 +90,10 @@ class AsyncLogger:
             "ai_response": ai_response
            
         }
+        
+        # 如果有原始AI响应，也记录下来
+        if ori_ai_response is not None:
+            log_entry["ori_ai_response"] = ori_ai_response
         
         # 如果是 chat/completions 接口，保存完整的 messages 和单独提取 system 消息
         if endpoint == "/v1/chat/completions" and messages:
@@ -277,7 +275,7 @@ async def process_stream(response: httpx.Response, endpoint=None, request_id=Non
                 yield f"data: {json.dumps(obj, ensure_ascii=False)}\n\n".encode('utf-8')
                 
                 # 添加延迟以产生明显的流式效果
-                await asyncio.sleep(0.04)  # 40毫秒延迟，让流式效果更明显
+                await asyncio.sleep(0.01)  # 10毫秒延迟，让流式效果更明显
         
         # 发送结束标记
         if endpoint == "/v1/completions":
@@ -393,9 +391,10 @@ async def proxy_streaming_request(request: Request, endpoint: str) -> StreamingR
                                     # 检查是否有最终回复标记
                                     if '_final_response' in chunk_data and '_request_id' in chunk_data and not logged:
                                         ai_response = chunk_data['_final_response']
+                                        ori_ai_response = chunk_data.get('_complete_content', ai_response)
                                         # 异步记录日志，不阻塞响应
                                         asyncio.create_task(logger.log_interaction(
-                                            request_id, user_input, ai_response, endpoint, messages, prompt, is_streaming
+                                            request_id, user_input, ai_response, endpoint, messages, prompt, is_streaming, ori_ai_response
                                         ))
                                         logged = True  # 标记已记录
                                         # 清理临时字段
@@ -413,9 +412,10 @@ async def proxy_streaming_request(request: Request, endpoint: str) -> StreamingR
                                 # 检查是否有最终回复标记
                                 if '_final_response' in chunk_data and '_request_id' in chunk_data and not logged:
                                     ai_response = chunk_data['_final_response']
+                                    ori_ai_response = chunk_data.get('_complete_content', ai_response)
                                     # 异步记录日志，不阻塞响应
                                     asyncio.create_task(logger.log_interaction(
-                                        request_id, user_input, ai_response, endpoint, messages, prompt, is_streaming
+                                        request_id, user_input, ai_response, endpoint, messages, prompt, is_streaming, ori_ai_response
                                     ))
                                     logged = True  # 标记已记录
                                     # 清理临时字段
@@ -489,10 +489,13 @@ async def proxy_direct_request(request: Request, endpoint: str) -> Response:
                 
                 response_data = json.loads(response.content)
                 ai_response = ""
+                ori_ai_response = ""  # 初始化原始响应
                 
                 if endpoint == "/v1/chat/completions" and response_data.get('choices'):
+                    ori_ai_response =  response_data['choices'][0].get('message', {}).get('content', '')
                     ai_response = response_data['choices'][0].get('message', {}).get('content', '')
                 elif endpoint == "/v1/completions" and response_data.get('choices'):
+                    ori_ai_response = response_data['choices'][0].get('text', '')
                     ai_response = response_data['choices'][0].get('text', '')
                 
                 logger_std.debug(f"Extracted AI response: {repr(ai_response)}")
@@ -518,7 +521,7 @@ async def proxy_direct_request(request: Request, endpoint: str) -> Response:
                         
                         # 异步记录日志，不阻塞响应
                         asyncio.create_task(logger.log_interaction(
-                            request_id, user_input, ai_response, endpoint, messages, prompt, is_streaming
+                            request_id, user_input, ai_response, endpoint, messages, prompt, is_streaming, ori_ai_response
                         ))
                         
                         logger_std.debug("Returning modified response with direct answer")
@@ -534,7 +537,7 @@ async def proxy_direct_request(request: Request, endpoint: str) -> Response:
                 
                 # 正常情况下异步记录日志，不阻塞响应
                 asyncio.create_task(logger.log_interaction(
-                    request_id, user_input, ai_response, endpoint, messages, prompt, is_streaming
+                    request_id, user_input, ai_response, endpoint, messages, prompt, is_streaming, ori_ai_response
                 ))
             except Exception as e:
                 logger_std.error(f"Error processing response for {endpoint}: {e}")

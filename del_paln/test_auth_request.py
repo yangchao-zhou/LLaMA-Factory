@@ -187,8 +187,8 @@ async def main():
         await asyncio.sleep(1)
         
         # 测试流式请求
-        # print("测试流式请求...")
-        # await test_stream_auth_request(endpoint)
+        print("测试流式请求...")
+        await test_stream_auth_request(endpoint)
         
         # 等待一秒
         await asyncio.sleep(1)
