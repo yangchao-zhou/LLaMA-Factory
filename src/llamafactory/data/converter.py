@@ -141,6 +141,7 @@ class SharegptDatasetConverter(DatasetConverter):
         aligned_messages = []
         broken_data = False
         for turn_idx, message in enumerate(messages):
+            # TODO (yangchao.zhou): 角色扮演的数据特殊
             if message[self.dataset_attr.role_tag] not in accept_tags[turn_idx % 2]:
                 logger.warning_rank0(f"Invalid role tag in {messages}.")
                 broken_data = True
@@ -152,7 +153,7 @@ class SharegptDatasetConverter(DatasetConverter):
                     "content": message[self.dataset_attr.content_tag],
                 }
             )
-
+        # TODO (yangchao.zhou): 角色扮演的数据特殊
         if (not self.dataset_attr.ranking and len(aligned_messages) % 2 != 0) or (
             self.dataset_attr.ranking and len(aligned_messages) % 2 == 0
         ):

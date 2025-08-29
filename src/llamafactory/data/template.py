@@ -83,7 +83,13 @@ class Template:
         """
         encoded_messages = self._encode(tokenizer, messages, system, tools)
         return [(encoded_messages[i], encoded_messages[i + 1]) for i in range(0, len(encoded_messages), 2)]
+        # TODO 角色扮演特殊处理
+        # if len(encoded_messages) % 2 != 0:
+        #     # encoded_messages.append([])
+        #     encoded_messages = encoded_messages[:-1]
 
+        # return [(encoded_messages[i], encoded_messages[i + 1]) for i in range(0, len(encoded_messages), 2)]
+    
     def extract_tool(self, content: str) -> Union[str, List["FunctionCall"]]:
         r"""
         Extracts tool message.
@@ -399,6 +405,61 @@ class Llama2Template(Template):
             "{% endif %}"
             "{% endfor %}"
         )
+        return jinja_template
+
+
+@dataclass
+class MistralSmallTemplate(Template):
+
+    def _get_jinja_template(self, tokenizer: "PreTrainedTokenizer") -> str:
+        r"""
+        Returns the jinja template for Kun Lun LLM.
+        """
+        prefix = self._convert_slots_to_jinja(self.format_prefix.apply(), tokenizer)
+
+        jinja_template = """
+{%- set today = strftime_now("%Y-%m-%d") %}
+{%- set default_system_message = "You are Kun Lun LLM, a Large Language Model (LLM) 
+created by Kunlun Wanwei Company.\nYour knowledge base was last updated on 2023-10-01. 
+The current date is " ~ today ~ ".\n\nWhen you're not sure about some information, 
+you say that you don't have the information and don't make up anything.\n
+If the user's question is not clear, ambiguous, or does not provide enough context for 
+you to accurately answer the question, you do not try to answer it right away and you 
+rather ask the user to clarify their request (e.g. \"What are some good restaurants 
+around me?\" => \"Where are you?\" or \"When is the next flight to Tokyo\" => 
+\"Where do you travel from?\")" %}
+"""
+
+        if prefix:
+            jinja_template += f"{{{{ {prefix} }}}}\n"
+
+        # 处理 system_message
+        jinja_template += """
+{%- if messages[0]['role'] == 'system' %}
+    {%- set system_message = messages[0]['content'] %}
+    {%- set loop_messages = messages[1:] %}
+{%- else %}
+    {%- set system_message = default_system_message %}
+    {%- set loop_messages = messages %}
+{%- endif %}
+{{- '[SYSTEM_PROMPT]' + system_message + '[/SYSTEM_PROMPT]' }}
+"""
+
+        # 遍历消息
+        jinja_template += """
+{%- for message in loop_messages %}
+    {%- if message['role'] == 'user' %}
+        {{- '[INST]' + message['content'] + '[/INST]' }}
+    {%- elif message['role'] == 'system' %}
+        {{- '[SYSTEM_PROMPT]' + message['content'] + '[/SYSTEM_PROMPT]' }}
+    {%- elif message['role'] == 'assistant' %}
+        {{- message['content'] + eos_token }}
+    {%- else %}
+        {{- raise_exception('Only user, system and assistant roles are supported!') }}
+    {%- endif %}
+{%- endfor %}
+"""
+
         return jinja_template
 
 
@@ -1195,7 +1256,42 @@ register_template(
     format_observation=StringFormatter(slots=["""[TOOL_RESULTS]{"content": {{content}}}[/TOOL_RESULTS]"""]),
     format_tools=ToolFormatter(tool_format="mistral"),
     format_prefix=EmptyFormatter(slots=[{"bos_token"}]),
+    # template_class=MistralSmallTemplate,
 )
+
+
+# copied from chatml template
+# register_template(
+#     name="mistral_small_npc",
+#     format_user=StringFormatter(slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
+#     format_assistant=StringFormatter(slots=["{{content}}<|im_end|>\n"]),
+#     format_system=StringFormatter(slots=["<|im_start|>system\n{{content}}<|im_end|>\n"]),
+#     format_observation=StringFormatter(slots=["<|im_start|>tool\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
+#     stop_words=["<|im_end|>", "<|im_start|>"],
+#     replace_eos=True,
+#     replace_jinja_template=True,
+# )
+
+# 注册模板，将对话中的 "assistant" 修改为 "NPC"
+register_template(
+    name="mistral_small_npc",
+    format_user=StringFormatter(
+        slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>NPC\n"]
+    ),
+    format_assistant=StringFormatter(
+        slots=["{{content}}<|im_end|>\n"]
+    ),
+    format_system=StringFormatter(
+        slots=["<|im_start|>system\n{{content}}<|im_end|>\n"]
+    ),
+    format_observation=StringFormatter(
+        slots=["<|im_start|>tool\n{{content}}<|im_end|>\n<|im_start|>NPC\n"]
+    ),
+    stop_words=["<|im_end|>", "<|im_start|>"],
+    replace_eos=True,
+    replace_jinja_template=True,
+)
+
 
 
 register_template(

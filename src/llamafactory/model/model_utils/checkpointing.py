@@ -24,6 +24,7 @@ from types import MethodType
 from typing import TYPE_CHECKING, Any, Callable, Dict, Optional, Tuple, Union
 
 import torch
+import functools
 
 from ...extras import logging
 from ...extras.constants import LAYERNORM_NAMES
@@ -83,7 +84,14 @@ def get_custom_gradient_checkpointing_func(gradient_checkpointing_func: Callable
 
     @wraps(gradient_checkpointing_func, assigned=WRAPPER_ASSIGNMENTS + ("__self__",))
     def custom_gradient_checkpointing_func(func: Callable, *args: Union["torch.Tensor", Any], **kwargs):
-        module: "torch.nn.Module" = func.__self__
+        # 解包 functools.partial 获取原始函数
+        if isinstance(func, functools.partial):
+            func = func.func  # 解包 partial
+            
+        # module: "torch.nn.Module" = func.__self__
+        module: "torch.nn.Module" = getattr(func, "__self__", None)
+        if module is None:
+            raise TypeError("Cannot determine the module from the given function. Expected a bound method.")
 
         has_grad = False
         if any(param.requires_grad for param in module.parameters()):

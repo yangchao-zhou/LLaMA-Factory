@@ -46,6 +46,7 @@ FILEEXT2TYPE = {
     "jsonl": "json",
     "parquet": "parquet",
     "txt": "text",
+    "bin": "json",
 }
 
 IGNORE_INDEX = -100

@@ -1,0 +1,54 @@
+### model
+# model_name_or_path: /maindata/data/shared/public/yangchao.zhou/models/Qwen/Qwen-72B
+# trust_remote_code: true
+# model_name_or_path: /maindata/data/shared/public/yangchao.zhou/models/mistralai/Mistral-Small-24B-Base-2501
+model_name_or_path: /maindata/data/shared/public/common_models/Qwen2.5-72B-Instruct
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+# finetuning_type: freeze
+# freeze_trainable_layers: 20
+# freeze_trainable_modules: all
+deepspeed: examples/deepspeed/ds_z3_offload_config.json
+
+### dataset linky_score_20250221,
+# dataset: tulu_alpaca_percent5,deepseek_7_9_6875,role_play_combined_data_202500304_3,score_train_data_20250304,lima
+dataset: AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
+
+template: qwen
+# template: mistral
+cutoff_len: 8192
+max_samples: 1000000000000
+overwrite_cache: true
+preprocessing_num_workers: 120
+
+
+### output
+output_dir: saves/full/qwen-25-72b-ins-sft_AIME_gpqa-diamond_HLE_usamo_20250407
+# output_dir: saves/mistral-24b-linky/full/sft-20250306-role_play6-lima-24B-qwen
+logging_steps: 1
+# save_steps: 100
+save_strategy: epoch
+save_total_limit: 4
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 1
+learning_rate: 3.0e-6
+num_train_epochs: 8.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+# warmup_steps: 50
+bf16: true
+ddp_timeout: 180000000
+flash_attn: fa2
+resume_from_checkpoint: true
+
+### eval
+# val_size: 0.01
+# per_device_eval_batch_size: 2
+# # eval_strategy: epoch
+# eval_steps: 200

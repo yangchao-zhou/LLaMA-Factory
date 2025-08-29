@@ -1,0 +1,65 @@
+### model
+model_name_or_path: /aisocial-nlp/common_models/Mistral-Small-24B-Instruct-2501
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+# finetuning_type: freeze
+# freeze_trainable_layers: 20
+# freeze_trainable_modules: all
+deepspeed: examples/deepspeed/ds_z3_offload_config.json
+# deepspeed: examples/deepspeed/ds_z3_config.json
+# deepspeed: examples/deepspeed/ds_z2_config.json
+
+### dataset linky_score_20250221,
+# dataset: hle_processed_data_gpt,hle_processed_data_qwen72B,hle_almost_all_correct
+# dataset: AIME_2024_processed_data_gpt,AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_gpt,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_gpt,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_gpt,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
+# dataset: AIME_2024_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,AIME_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,gpqa-diamond_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,hle_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans,usamo_2025_processed_data_Llama-33-70b-ins-sft_qwen_gpt_20250402_2give_ans
+dataset: Aider
+# 
+# aider_diff-0527-gpt-for_1-del_part,aider_diff-0527-gpt-for_0-del_part
+# aider_whole-0524-gpt_md-for_1,aider_whole-0524-gpt-for_0
+# aider_diff-0524-gpt_md-for_1,,aider_diff-0524-gpt-for_0
+# Aider,Aider-diff，Aider-diff,Aider-whole 
+# Aider-whole,Aider-architect,Aider-diff,Aider-diff-fenced,
+#  LCB_v6,AIME2024,AIME2025,gpqa-diamond,usamo_2025,hle,lima
+
+# template: mistral_small_npc
+template: mistral_small
+cutoff_len: 16384
+max_samples: 1000000000000
+overwrite_cache: true
+preprocessing_num_workers: 120
+
+
+### output
+# output_dir: /nas/sft_models/full_sft/mistral-24B-ins-sft_aider_20250508-5e-6
+# output_dir: saves/full_sft/mistral-24B-ins-sft_aider_20250509-5e-6
+output_dir: /aisocial-nlp/yangchao.zhou/projects/LLaMA-Factory/saves/full_sft/mistral-24B-ins-sft_aider-summary-0605-8002-lima
+logging_steps: 1
+# save_steps: 300
+save_strategy: epoch
+save_total_limit: 5
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 1
+learning_rate: 3.0e-6
+num_train_epochs: 15.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+# warmup_steps: 50
+bf16: true
+ddp_timeout: 180000000
+flash_attn: fa2
+save_only_model: true
+mask_history: true
+# resume_from_checkpoint: true
+
+### eval
+# val_size: 0.05
+# per_device_eval_batch_size: 1
+# eval_strategy: epoch
+# eval_steps: 200
